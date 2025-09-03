@@ -1,8 +1,6 @@
-# 2025SIS_Group24
+# Project Title: Rental Marketplace
 
-### Project Title: Rental Marketplace
-
-## Project Group 24
+## Group 24
 
 | Student Name | Project Role |
 |---|---|
@@ -11,19 +9,13 @@
 | Kim | Back-end developer |
 | Quinton | Front-end developer |
 
-## Feature Branch Housekeeping
+## Housekeeping
 
-### <ins>Creating and pushing to branch<\ins>
+### Branch
 
-Navigate to the root directory (2025SIS_Group24).
+Ensure master is up to date using `git pull`
 
-Ensure that your master is up to date by pulling changes from upstream.
-
-```
-git pull
-```
-
-Create and switch to branch in terminal:
+Create/switch to branch:
 
 ```
 git checkout -b branch-name
@@ -38,14 +30,22 @@ Quick table for commands:
 | Pushing to repository (now that branch is available in repo) | `git push origin <branch-name>` |
 | Deleting a branch (only when necessary) | `git branch -d <branch-name>` |
 
+### Pull Request
+
+```
+git add .
+git commit -m "meaningful message"
+git push
+
+```
+
+Create PR in GitHub.
 
 ## Backend Setup
 
-### <ins>Setting up a virtual environment</ins>
+**<ins>Setting up a virtual environment</ins>**
 
-Move terminal to backend directory `cd backend`
-
-In the project directory, execute the following commands in terminal: 
+In terminal: 
 
 ```
 cd backend
@@ -55,30 +55,33 @@ python3 -m venv env
 source env/bin/activate
 ```
 
-Replace `env` with what you intend to name your virtual environment. 
-Recommend to keep `env` to align with .gitignore file.
-
-**Install the required dependencies after you've created and are in the virual environment**
+Install dependencies:
 
 ```
 pip install -r requirements.txt
 ```
 
-To deactivate the virtual enviroment, execute `deactivate` in the terminal while in the backend directory. 
+Deactivate the virtual enviroment:
+```
+deactivate
+```
 
-### <ins>Running the FastAPI app</ins>
+**<ins>Running backend</ins>**
 
-Navigate to the backend/app directory. 
+Navigate to backend directory
 
-Using uvicorn:
+Standard:
+```
+python3 -m app.main
+```
+
+Docker compose:
+```
+docker compose up --build
+```
+
+Other:
 ```
 uvicorn main:app --reload
+fastapi run app/main.py
 ```
-
-Using fastAPI:
-```
-fastapi run main.py
-```
-
-
-
