@@ -1,0 +1,32 @@
+services:
+  # FastAPI
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: fastapi-app
+    volumes:
+      - .:/app
+    ports:
+      - "8000:8000"
+    environment:
+      - URL_DB='postgresql://postgres:postgresdb24@localhost:5431/rental-marketplace'
+    depends_on:
+      - db
+
+# postgres
+  db:
+    image: postgres:latest
+    container_name: postgres-db
+    restart: always
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgresdb24
+      - POSTGRES_DB=rental-marketplace
+    ports:
+      - "5431:5432"
+    volumes:
+      - db_data:/var/lib/postgresql/data
+
+volumes:
+  db_data:
