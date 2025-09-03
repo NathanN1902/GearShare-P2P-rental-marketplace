@@ -10,7 +10,7 @@ services:
     ports:
       - "8000:8000"
     environment:
-      - URL_DB='postgresql://postgres:postgresdb24@localhost:5431/rental-marketplace'
+      - POSTGRES_DB='postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@localhost:${POSTGRES_PORT}/${POSTGRES_DB}'
     depends_on:
       - db
 
@@ -20,9 +20,9 @@ services:
     container_name: postgres-db
     restart: always
     environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgresdb24
-      - POSTGRES_DB=rental-marketplace
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
     ports:
       - "5431:5432"
     volumes:

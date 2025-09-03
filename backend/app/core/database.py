@@ -2,9 +2,9 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
 
-URL_DB = 'postgresql://postgres:postgresdb24@localhost:5432/rental-marketplace'
+POSTGRES_DB = 'postgresql://postgres:postgresdb24@localhost:5432/rental-marketplace'
 
-engine = create_engine(URL_DB)
+engine = create_engine(POSTGRES_DB)
 
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
