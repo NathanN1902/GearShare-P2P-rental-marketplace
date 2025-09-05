@@ -6,11 +6,11 @@ services:
       dockerfile: Dockerfile
     container_name: fastapi-app
     volumes:
-      - .:/app
+      - ./app:/app/app
     ports:
       - "8000:8000"
     environment:
-      - POSTGRES_DB='postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@localhost:${POSTGRES_PORT}/${POSTGRES_DB}'
+      - POSTGRES_URL=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:${POSTGRES_PORT}/${POSTGRES_DB}
     depends_on:
       - db
 
@@ -24,7 +24,7 @@ services:
       - POSTGRES_DB=${POSTGRES_DB}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
     ports:
-      - "5431:5432"
+      - "5433:5432"
     volumes:
       - db_data:/var/lib/postgresql/data
 

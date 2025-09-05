@@ -1,11 +1,19 @@
 import uvicorn
+from contextlib import asynccontextmanager
 from fastapi import FastAPI, HTTPException, Depends
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.core import SessionLocal, engine
 from app.routers import authRouter
+from app.utils.init_db import create_tables
 
-# TODO: implement async def lifespan(app: FastAPI), from contextlib import asynccontextmanager
+# @asynccontextmanager
+# async def lifespan(app: FastAPI):
+#     # Initiate DB
+#     create_tables()
+#     print("Tables created")
+#     # Separator
+#     yield
 
 # Create FastAPI app
 app = FastAPI()
@@ -25,8 +33,6 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"]
 )
-
-# TODO: Implement postgres tables initiation, import init_db.py from utils
 
 # confirm FastAPI is running
 @app.get("/confirm")
