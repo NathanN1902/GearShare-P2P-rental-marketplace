@@ -1,10 +1,15 @@
+import os
+from dotenv import load_dotenv
+
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
 
-POSTGRES_DB = 'postgresql://postgres:postgresdb24@localhost:5432/rental-marketplace'
+load_dotenv()
 
-engine = create_engine(POSTGRES_DB)
+POSTGRES_URL = os.path.expandvars(os.environ.get('POSTGRES_URL'))
+
+engine = create_engine(POSTGRES_URL)
 
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
