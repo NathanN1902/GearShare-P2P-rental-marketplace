@@ -1,14 +1,19 @@
-// src/features/browse/pages/Browse.tsx
 import React from "react";
+import Header from "../../../components/Header";
+import Footer from "../../../components/Footer";
 
 const Browse: React.FC = () => {
   return (
-    <div style={{ padding: "2rem" }}>
-      <h1>Browse Page</h1>
-      <p>This is the placeholder for Browse.</p>
-    </div>
+    <>
+      <Header />
+      <main className="container my-5">
+        <h1>Browse Page</h1>
+        <p>This is the placeholder for the browse page.</p>
+      </main>
+      <Footer />
+    </>
   );
 };
 
-export default Browse;   // ✅ must exist
+export default Browse;
 
