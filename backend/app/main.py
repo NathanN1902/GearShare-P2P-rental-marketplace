@@ -7,16 +7,16 @@ from app.core import SessionLocal, engine
 from app.routers import authRouter
 from app.utils.init_db import create_tables
 
-# @asynccontextmanager
-# async def lifespan(app: FastAPI):
-#     # Initiate DB
-#     create_tables()
-#     print("Tables created")
-#     # Separator
-#     yield
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    # Initiate DB
+    await create_tables()
+    print("Tables created")
+    # Separator
+    yield
 
 # Create FastAPI app
-app = FastAPI()
+app = FastAPI(lifespan=lifespan)
 
 # Include authentication routers
 app.include_router(authRouter, prefix="/auth", tags=["auth"])
@@ -35,9 +35,9 @@ app.add_middleware(
 )
 
 # confirm FastAPI is running
-@app.get("/confirm")
+@app.get("/health")
 def app_confirm():
-    return {"status": "Running..."}
+    return {"status": "Healthy..."}
 
 # TODO : Create endpoints
 
