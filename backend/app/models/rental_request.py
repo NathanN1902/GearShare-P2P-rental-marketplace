@@ -2,21 +2,21 @@ from app.core.database import Base
 
 from sqlalchemy import Column
 from sqlalchemy import DateTime
-from sqlalchemy import Integer
 from sqlalchemy import ForeignKey
+from sqlalchemy import Integer
 from sqlalchemy import String
-from sqlalchemy import Float
 
-class Payment(Base):
-    __tablename__ = "Payments"
+class Rental_Request(Base):
+    __tablename__ = "Rental_Requests"
 
     id = Column(Integer, primary_key=True, index=True)
-    amount = Column(Float, nullable=False)
-    date_paid = Column(DateTime, nullable=False)
+    date_requested = Column(DateTime, nullable=False)
+    rent_start = Column(DateTime, nullable=False)
+    rent_end = Column(DateTime, nullable=False)
 
-    # TODO: Enforce status (pending, completed, rejected)
+    # TODO: Enforce status (pending, approved, rejected)
     status = Column(String, nullable=False)
 
-    booking_id = Column(Integer, ForeignKey("Bookings.id"), nullable=False)
+    item_id = Column(Integer, ForeignKey("Items.id"), nullable=False)
     renter_id = Column(Integer, ForeignKey("Users.id"), nullable=False)
     lender_id = Column(Integer, ForeignKey("Users.id"), nullable=False)
