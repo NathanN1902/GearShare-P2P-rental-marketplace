@@ -13,7 +13,7 @@ export default function Login() {
             className="row g-3"
             onSubmit={(e) => {
               e.preventDefault();
-              alert("Dummy login — integrate with your backend later.");
+              alert("Dummy login");
             }}
           >
             <div className="col-12">
