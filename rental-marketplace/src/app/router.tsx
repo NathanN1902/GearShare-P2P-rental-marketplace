@@ -21,7 +21,7 @@ export const router = createBrowserRouter([
   {
     element: <RootLayout />,
     children: [
-      { index: true, element: <Home /> },      // ✅ this makes "/" render Home
+      { index: true, element: <Home /> }, 
       { path: "browse", element: <Browse /> },
       { path: "tools/:id", element: <ToolDetails /> },
       { path: "login", element: <Login /> },
