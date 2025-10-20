@@ -3,7 +3,7 @@ import Header from "../../../components/Header";
 import Footer from "../../../components/Footer";
 import ToolCard from "../../../components/ToolCard";
 import Skeleton from "../../../components/Skeleton";
-import { fetchTools } from "../api";
+import { fetchTools, type SortOrder } from "../api";
 import type { Tool } from "../../../data/types";
 
 const Browse: React.FC = () => {
@@ -11,10 +11,13 @@ const Browse: React.FC = () => {
   const [loading, setLoading] = React.useState(true);
   const [error, setError] = React.useState<string | null>(null);
 
-  // Filters
+  // price filter
   const [searchQuery, setSearchQuery] = React.useState("");
   const [priceMin, setPriceMin] = React.useState<number | undefined>(undefined);
   const [priceMax, setPriceMax] = React.useState<number | undefined>(undefined);
+
+  // sort
+  const [sort, setSort] = React.useState<SortOrder | undefined>(undefined);
 
   const loadTools = React.useCallback(async () => {
     setLoading(true);
@@ -24,6 +27,7 @@ const Browse: React.FC = () => {
         query: searchQuery.trim(),
         priceMin,
         priceMax,
+        sort,
       });
       setTools(data);
     } catch (err) {
@@ -32,7 +36,7 @@ const Browse: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  }, [searchQuery, priceMin, priceMax]);
+  }, [searchQuery, priceMin, priceMax, sort]);
 
   React.useEffect(() => {
     loadTools();
@@ -47,6 +51,7 @@ const Browse: React.FC = () => {
     setSearchQuery("");
     setPriceMin(undefined);
     setPriceMax(undefined);
+    setSort(undefined);
     loadTools();
   };
 
@@ -56,15 +61,15 @@ const Browse: React.FC = () => {
       <main className="container my-5">
         <section className="mb-4 text-center">
           <h1 className="mb-3">Browse Tools</h1>
-          <p className="text-muted">Search and filter tools by price range.</p>
+          <p className="text-muted">Search, filter by price, and sort results.</p>
         </section>
 
-        {/* Filters */}
+        {/* Filters + Sort */}
         <form
           onSubmit={handleSubmit}
           className="mb-4 row justify-content-center gy-2 gx-3 align-items-center"
         >
-          {/* Search bar */}
+          {/* Search */}
           <div className="col-12 col-md-4">
             <input
               type="text"
@@ -75,7 +80,7 @@ const Browse: React.FC = () => {
             />
           </div>
 
-          {/* Price filters */}
+          {/* Price min */}
           <div className="col-6 col-md-2">
             <input
               type="number"
@@ -85,9 +90,11 @@ const Browse: React.FC = () => {
               onChange={(e) =>
                 setPriceMin(e.target.value ? Number(e.target.value) : undefined)
               }
+              min={0}
             />
           </div>
 
+          {/* Price max */}
           <div className="col-6 col-md-2">
             <input
               type="number"
@@ -97,17 +104,34 @@ const Browse: React.FC = () => {
               onChange={(e) =>
                 setPriceMax(e.target.value ? Number(e.target.value) : undefined)
               }
+              min={0}
             />
           </div>
 
-          {/* Buttons */}
+          {/* Sort */}
+          <div className="col-12 col-md-3">
+            <select
+              className="form-select"
+              value={sort ?? ""}
+              onChange={(e) =>
+                setSort((e.target.value || undefined) as SortOrder | undefined)
+              }
+            >
+              <option value="">Sort by…</option>
+              <option value="price-asc">Price: Low → High</option>
+              <option value="price-desc">Price: High → Low</option>
+              <option value="newest">Newest → Oldest</option>
+              <option value="oldest">Oldest → Newest</option>
+            </select>
+          </div>
+
+          <div className="col-12 col-md-1 d-flex gap-2 justify-content-center">
+            <button type="submit" className="btn btn-primary w-100">Apply</button>
+          </div>
           <div className="col-12 col-md-2 d-flex gap-2 justify-content-center">
-            <button type="submit" className="btn btn-primary">
-              Apply
-            </button>
             <button
               type="button"
-              className="btn btn-outline-secondary"
+              className="btn btn-outline-secondary w-100"
               onClick={handleClearFilters}
             >
               Clear
@@ -115,10 +139,9 @@ const Browse: React.FC = () => {
           </div>
         </form>
 
-        {/* Error */}
+        {/* Results */}
         {error && <div className="alert alert-danger text-center">{error}</div>}
 
-        {/* Loading */}
         {loading && (
           <div className="row g-3">
             {Array.from({ length: 6 }).map((_, i) => (
@@ -129,12 +152,10 @@ const Browse: React.FC = () => {
           </div>
         )}
 
-        {/* No results */}
         {!loading && !error && tools.length === 0 && (
           <div className="text-center text-secondary">No tools found.</div>
         )}
 
-        {/* Results */}
         {!loading && !error && tools.length > 0 && (
           <div className="row g-3">
             {tools.map((tool) => (
@@ -151,6 +172,7 @@ const Browse: React.FC = () => {
 };
 
 export default Browse;
+
 
 
 
