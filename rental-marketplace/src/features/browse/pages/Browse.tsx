@@ -2,6 +2,7 @@ import React from "react";
 import Header from "../../../components/Header";
 import Footer from "../../../components/Footer";
 import ToolCard from "../../../components/ToolCard";
+import Skeleton from "../../../components/Skeleton";
 import { fetchTools } from "../api";
 import type { Tool } from "../../../data/types";
 
@@ -33,9 +34,21 @@ const Browse: React.FC = () => {
           <p className="text-muted">Explore all available tools for rent in your area.</p>
         </section>
 
-        {loading ? (
-          <div className="text-center text-secondary">Loading…</div>
-        ) : (
+        {loading && (
+          <div className="row g-3">
+            {Array.from({ length: 6 }).map((_, i) => (
+              <div className="col-12 col-sm-6 col-lg-4" key={i}>
+                <Skeleton />
+              </div>
+            ))}
+          </div>
+        )}
+        
+        {!loading && tools.length === 0 && (
+          <div className="text-center text-secondary">No tools found.</div>
+        )}
+        
+        {!loading && tools.length > 0 && (
           <div className="row g-3">
             {tools.map((tool) => (
               <div className="col-12 col-sm-6 col-lg-4" key={tool.id}>
