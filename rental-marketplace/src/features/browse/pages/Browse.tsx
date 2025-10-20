@@ -9,14 +9,22 @@ import type { Tool } from "../../../data/types";
 const Browse: React.FC = () => {
   const [tools, setTools] = React.useState<Tool[]>([]);
   const [loading, setLoading] = React.useState(true);
-  const [searchQuery, setSearchQuery] = React.useState("");
   const [error, setError] = React.useState<string | null>(null);
 
-  const loadTools = React.useCallback(async (query?: string) => {
+  // Filters
+  const [searchQuery, setSearchQuery] = React.useState("");
+  const [priceMin, setPriceMin] = React.useState<number | undefined>(undefined);
+  const [priceMax, setPriceMax] = React.useState<number | undefined>(undefined);
+
+  const loadTools = React.useCallback(async () => {
     setLoading(true);
     setError(null);
     try {
-      const data = await fetchTools(query);
+      const data = await fetchTools({
+        query: searchQuery.trim(),
+        priceMin,
+        priceMax,
+      });
       setTools(data);
     } catch (err) {
       console.error(err);
@@ -24,7 +32,7 @@ const Browse: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [searchQuery, priceMin, priceMax]);
 
   React.useEffect(() => {
     loadTools();
@@ -32,7 +40,14 @@ const Browse: React.FC = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    loadTools(searchQuery.trim());
+    loadTools();
+  };
+
+  const handleClearFilters = () => {
+    setSearchQuery("");
+    setPriceMin(undefined);
+    setPriceMax(undefined);
+    loadTools();
   };
 
   return (
@@ -41,27 +56,69 @@ const Browse: React.FC = () => {
       <main className="container my-5">
         <section className="mb-4 text-center">
           <h1 className="mb-3">Browse Tools</h1>
-          <p className="text-muted">Explore all available tools for rent in your area.</p>
+          <p className="text-muted">Search and filter tools by price range.</p>
         </section>
 
-        {/* Search Bar */}
-        <form onSubmit={handleSubmit} className="mb-4 d-flex justify-content-center">
-          <input
-            type="text"
-            className="form-control w-50 me-2"
-            placeholder="Search tools or locations..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-          />
-          <button type="submit" className="btn btn-primary">
-            Search
-          </button>
+        {/* Filters */}
+        <form
+          onSubmit={handleSubmit}
+          className="mb-4 row justify-content-center gy-2 gx-3 align-items-center"
+        >
+          {/* Search bar */}
+          <div className="col-12 col-md-4">
+            <input
+              type="text"
+              className="form-control"
+              placeholder="Search tools..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
+          </div>
+
+          {/* Price filters */}
+          <div className="col-6 col-md-2">
+            <input
+              type="number"
+              className="form-control"
+              placeholder="Min $"
+              value={priceMin ?? ""}
+              onChange={(e) =>
+                setPriceMin(e.target.value ? Number(e.target.value) : undefined)
+              }
+            />
+          </div>
+
+          <div className="col-6 col-md-2">
+            <input
+              type="number"
+              className="form-control"
+              placeholder="Max $"
+              value={priceMax ?? ""}
+              onChange={(e) =>
+                setPriceMax(e.target.value ? Number(e.target.value) : undefined)
+              }
+            />
+          </div>
+
+          {/* Buttons */}
+          <div className="col-12 col-md-2 d-flex gap-2 justify-content-center">
+            <button type="submit" className="btn btn-primary">
+              Apply
+            </button>
+            <button
+              type="button"
+              className="btn btn-outline-secondary"
+              onClick={handleClearFilters}
+            >
+              Clear
+            </button>
+          </div>
         </form>
 
         {/* Error */}
         {error && <div className="alert alert-danger text-center">{error}</div>}
 
-        {/* Loading skeletons */}
+        {/* Loading */}
         {loading && (
           <div className="row g-3">
             {Array.from({ length: 6 }).map((_, i) => (
@@ -72,12 +129,12 @@ const Browse: React.FC = () => {
           </div>
         )}
 
-        {/* Empty state */}
+        {/* No results */}
         {!loading && !error && tools.length === 0 && (
           <div className="text-center text-secondary">No tools found.</div>
         )}
 
-        {/* Render tool cards */}
+        {/* Results */}
         {!loading && !error && tools.length > 0 && (
           <div className="row g-3">
             {tools.map((tool) => (
@@ -94,6 +151,7 @@ const Browse: React.FC = () => {
 };
 
 export default Browse;
+
 
 
 
