@@ -4,6 +4,10 @@ import Browse from "../features/browse/pages/Browse";
 import ToolDetails from "../features/tool/pages/ToolDetails";
 import Login from "../features/auth/pages/Login";
 import User from "../features/user/pages/User";
+import List from "../features/list/pages/List";
+
+
+
 
 function RootLayout() {
   return (
@@ -22,6 +26,8 @@ export const router = createBrowserRouter([
       { path: "tools/:id", element: <ToolDetails /> },
       { path: "login", element: <Login /> },
       { path: "user", element: <User /> },
+      { path: "list", element: <List /> },
+
     ],
   },
 ]);
