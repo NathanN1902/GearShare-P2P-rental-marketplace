@@ -20,7 +20,6 @@ export default function Header() {
             <li className="nav-item"><Link to="/browse" className="nav-link">Browse</Link></li>
              <li className="nav-item"><Link to="/list" className="nav-link">List</Link></li>
             <li className="nav-item"><Link to="/user" className="nav-link">User</Link></li>
-            <li className="nav-item"><Link to="/messages" className="nav-link">Messages</Link></li>
           </ul>
           <Link to="/login" className="btn btn-outline-primary">Log in</Link>
         </div>

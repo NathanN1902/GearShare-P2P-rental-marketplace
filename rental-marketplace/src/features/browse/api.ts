@@ -1,26 +1,41 @@
 import type { Tool } from "../../data/types";
-import { TOOLS } from "../../data/fixtures";
 
 const sleep = (ms: number) => new Promise((res) => setTimeout(res, ms));
+
+async function loadAllTools(): Promise<Tool[]> {
+  // Load tools from JSON file
+  const response = await fetch("/data/tools.json");
+  const jsonTools: Tool[] = await response.json();
+
+  // Load tools from localStorage
+  const storedTools = localStorage.getItem("tools");
+  const localTools: Tool[] = storedTools ? JSON.parse(storedTools) : [];
+
+  // Combine both sources
+  return [...jsonTools, ...localTools];
+}
 
 export async function fetchTools(query?: string): Promise<Tool[]> {
   await sleep(200); // simulate network delay
 
-  if (!query) return TOOLS;
+  const allTools = await loadAllTools();
+
+  if (!query) return allTools;
 
   const lower = query.toLowerCase();
 
-  return TOOLS.filter(
+  return allTools.filter(
     (t) =>
-      t.title.toLowerCase().includes(lower) ||
-      t.subtitle.toLowerCase().includes(lower) ||
-      t.location.toLowerCase().includes(lower)
+      t.name.toLowerCase().includes(lower) ||
+      t.description.toLowerCase().includes(lower) ||
+      t.category.toLowerCase().includes(lower)
   );
 }
 
 export async function fetchToolById(id: string): Promise<Tool | undefined> {
   await sleep(150);
-  return TOOLS.find((t) => t.id === id);
+  const allTools = await loadAllTools();
+  return allTools.find((t) => t.id.toString() === id);
 }
 
 
