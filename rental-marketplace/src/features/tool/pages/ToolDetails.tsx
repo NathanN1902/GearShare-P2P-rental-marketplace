@@ -1,10 +1,10 @@
 import React from "react";
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useNavigate } from "react-router-dom";
 import emailjs from "@emailjs/browser";
 import Header from "../../../components/Header";
 import Footer from "../../../components/Footer";
 import { fetchToolById } from "../../browse/api";
-import type { Tool } from "../../../data/types";
+import type { Tool, User } from "../../../data/types";
 
 // EmailJS configuration - you'll need to set these up at emailjs.com
 const EMAILJS_SERVICE_ID = "service_YOUR_ID"; // Replace with your service ID
@@ -30,15 +30,21 @@ interface Booking {
 
 const ToolDetails: React.FC = () => {
   const { id } = useParams<{ id: string }>();
+  const navigate = useNavigate();
   const [tool, setTool] = React.useState<Tool | null>(null);
   const [loading, setLoading] = React.useState(true);
   const [startDate, setStartDate] = React.useState("");
   const [endDate, setEndDate] = React.useState("");
-  const [renterName, setRenterName] = React.useState("");
-  const [renterEmail, setRenterEmail] = React.useState("");
   const [bookingSubmitted, setBookingSubmitted] = React.useState(false);
+  const [currentUser, setCurrentUser] = React.useState<User | null>(null);
 
   React.useEffect(() => {
+    // Check if user is logged in
+    const userJson = localStorage.getItem("currentUser");
+    if (userJson) {
+      setCurrentUser(JSON.parse(userJson));
+    }
+
     if (!id) return;
     let alive = true;
     (async () => {
@@ -90,13 +96,15 @@ const ToolDetails: React.FC = () => {
   const handleBooking = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if (!startDate || !endDate) {
-      alert("Please select both start and end dates");
+    // Check if user is logged in
+    if (!currentUser) {
+      alert("Please log in to request a booking");
+      navigate("/login");
       return;
     }
 
-    if (!renterName || !renterEmail) {
-      alert("Please provide your name and email");
+    if (!startDate || !endDate) {
+      alert("Please select both start and end dates");
       return;
     }
 
@@ -110,9 +118,9 @@ const ToolDetails: React.FC = () => {
       toolName: tool.name,
       ownerId: tool.ownerId,
       ownerName: tool.owner,
-      renterId: 999, // TODO: Replace with actual logged-in user ID
-      renterName: renterName,
-      renterEmail: renterEmail,
+      renterId: currentUser.id,
+      renterName: currentUser.name,
+      renterEmail: currentUser.email,
       startDate: startDate,
       endDate: endDate,
       pricePerDay: tool.price,
@@ -136,8 +144,8 @@ const ToolDetails: React.FC = () => {
           {
             to_email: "owner@example.com", // TODO: Replace with actual owner email
             tool_name: tool.name,
-            renter_name: renterName,
-            renter_email: renterEmail,
+            renter_name: currentUser.name,
+            renter_email: currentUser.email,
             start_date: startDate,
             end_date: endDate,
             days: days,
@@ -204,34 +212,17 @@ const ToolDetails: React.FC = () => {
                     <i className="bi bi-check-circle me-2"></i>
                     Booking request submitted! The owner will contact you soon.
                   </div>
+                ) : !currentUser ? (
+                  <div className="alert alert-warning">
+                    <i className="bi bi-exclamation-triangle me-2"></i>
+                    Please <Link to="/login">log in</Link> to request a booking.
+                  </div>
                 ) : (
                   <form onSubmit={handleBooking}>
-                    <div className="mb-3">
-                      <label htmlFor="renterName" className="form-label fw-semibold">
-                        Your Name
-                      </label>
-                      <input
-                        type="text"
-                        className="form-control"
-                        id="renterName"
-                        value={renterName}
-                        onChange={(e) => setRenterName(e.target.value)}
-                        required
-                      />
-                    </div>
-
-                    <div className="mb-3">
-                      <label htmlFor="renterEmail" className="form-label fw-semibold">
-                        Your Email
-                      </label>
-                      <input
-                        type="email"
-                        className="form-control"
-                        id="renterEmail"
-                        value={renterEmail}
-                        onChange={(e) => setRenterEmail(e.target.value)}
-                        required
-                      />
+                    <div className="mb-3 p-3 bg-light rounded">
+                      <div className="small text-secondary mb-1">Booking as:</div>
+                      <div className="fw-semibold">{currentUser.name}</div>
+                      <div className="small text-secondary">{currentUser.email}</div>
                     </div>
 
                     <div className="mb-3">

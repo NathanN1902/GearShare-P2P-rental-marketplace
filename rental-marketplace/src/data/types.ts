@@ -25,8 +25,15 @@ export type BrowseFilters = {
 };
 
 export type User = {
-  id: string;
+  id: number;
   name: string;
   email: string;
-  city: string;
+  password: string;
+  phone: string;
+  location: string;
+  bio: string;
+  memberSince: string;
+  rating: number;
+  totalRentals: number;
+  totalListings: number;
 };

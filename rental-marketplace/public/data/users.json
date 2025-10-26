@@ -1,0 +1,41 @@
+[
+  {
+    "id": 1,
+    "name": "John Doe",
+    "email": "john@example.com",
+    "password": "password123",
+    "phone": "+1 234-567-8900",
+    "location": "Sydney, NSW",
+    "bio": "Love renting and sharing tools with my community!",
+    "memberSince": "2024-01-15",
+    "rating": 4.8,
+    "totalRentals": 15,
+    "totalListings": 3
+  },
+  {
+    "id": 2,
+    "name": "Jane Smith",
+    "email": "jane@example.com",
+    "password": "password123",
+    "phone": "+1 234-567-8901",
+    "location": "Melbourne, VIC",
+    "bio": "DIY enthusiast and tool collector. Happy to share!",
+    "memberSince": "2024-02-20",
+    "rating": 4.9,
+    "totalRentals": 22,
+    "totalListings": 8
+  },
+  {
+    "id": 3,
+    "name": "Mike Johnson",
+    "email": "mike@example.com",
+    "password": "password123",
+    "phone": "+1 234-567-8902",
+    "location": "Brisbane, QLD",
+    "bio": "Professional contractor with lots of tools to share.",
+    "memberSince": "2024-03-10",
+    "rating": 5.0,
+    "totalRentals": 30,
+    "totalListings": 12
+  }
+]

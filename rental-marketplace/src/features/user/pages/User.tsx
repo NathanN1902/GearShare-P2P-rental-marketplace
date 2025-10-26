@@ -1,25 +1,41 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Header from "../../../components/Header";
 import Footer from "../../../components/Footer";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import type { User as UserType } from "../../../data/types";
 
 type UploadFile = File | null;
 
-
-
 const User: React.FC = () => {
-
+  const navigate = useNavigate();
   type TabName = "profile" | "listings" | "reviews" | "messages" | "settings";
   const [activeTab, setActiveTab] = useState<TabName>("profile");
-  // Dummy profile data
-  const [firstName, setFirstName] = useState("Nathan");
-  const [lastName, setLastName] = useState("Nguyen");
-  const [email, setEmail] = useState("jane@example.com");
+
+  // User profile data
+  const [user, setUser] = useState<UserType | null>(null);
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
-  const [city, setCity] = useState("Sydney, NSW");
-  const [bio, setBio] = useState(
-    "Lorem ipsum!"
-  );
+  const [location, setLocation] = useState("");
+  const [bio, setBio] = useState("");
+
+  useEffect(() => {
+    // Load logged-in user from localStorage
+    const currentUserJson = localStorage.getItem("currentUser");
+    if (!currentUserJson) {
+      // No user logged in, redirect to login
+      navigate("/login");
+      return;
+    }
+
+    const currentUser: UserType = JSON.parse(currentUserJson);
+    setUser(currentUser);
+    setName(currentUser.name);
+    setEmail(currentUser.email);
+    setPhone(currentUser.phone);
+    setLocation(currentUser.location);
+    setBio(currentUser.bio);
+  }, [navigate]);
 
   // Identity / verification
   const [progress, setProgress] = useState(60); // verification progress (dummy)
@@ -32,9 +48,27 @@ const User: React.FC = () => {
   const [twoFA, setTwoFA] = useState(true);
   const [showOnline, setShowOnline] = useState(false);
 
+  const handleLogout = () => {
+    localStorage.removeItem("currentUser");
+    navigate("/login");
+  };
+
   function handleSubmitProfile(e: React.FormEvent) {
     e.preventDefault();
-    alert("Profile saved (placeholder)");
+    if (!user) return;
+
+    // Update user in localStorage
+    const updatedUser = {
+      ...user,
+      name,
+      email,
+      phone,
+      location,
+      bio,
+    };
+    localStorage.setItem("currentUser", JSON.stringify(updatedUser));
+    setUser(updatedUser);
+    alert("Profile updated successfully!");
   }
 
   function handleSubmitVerification(e: React.FormEvent) {
@@ -50,13 +84,13 @@ const User: React.FC = () => {
       <main className="container my-4">
         {/* Top bar */}
         <div className="d-flex align-items-center gap-3 mb-3">
-          <button className="btn btn-light border">
+          <Link to="/browse" className="btn btn-light border">
             <i className="bi bi-arrow-left" /> Back
-          </button>
+          </Link>
           <div className="ms-auto">
-            <button className="btn btn-outline-secondary">
-              <i className="bi bi-pencil-square me-1" />
-              Edit Profile
+            <button className="btn btn-outline-danger" onClick={handleLogout}>
+              <i className="bi bi-box-arrow-right me-1" />
+              Logout
             </button>
           </div>
         </div>
@@ -70,19 +104,19 @@ const User: React.FC = () => {
             />
             <div className="flex-grow-1">
               <div className="d-flex flex-wrap align-items-center gap-2">
-                <h5 className="mb-0">{firstName} {lastName}</h5>
+                <h5 className="mb-0">{user?.name || "Loading..."}</h5>
                 <span className="badge text-bg-secondary">Member</span>
                 <span className="badge text-bg-success">
                   <i className="bi bi-shield-check me-1" />
                   Verified
                 </span>
                 <span className="badge text-bg-light border text-muted">
-                  {city}
+                  {user?.location || ""}
                 </span>
               </div>
               <div className="text-secondary small mt-2">
                 <i className="bi bi-geo-alt me-1" />
-                {city} • Joined 2024 • 5 completed rentals
+                {user?.location || ""} • Member since {user?.memberSince ? new Date(user.memberSince).getFullYear() : ""} • {user?.totalRentals || 0} completed rentals • {user?.totalListings || 0} listings
               </div>
             </div>
           </div>
@@ -126,20 +160,12 @@ const User: React.FC = () => {
               <div className="card-body">
                 <h6 className="mb-3">Profile Details</h6>
                 <form className="row g-3" onSubmit={handleSubmitProfile}>
-                  <div className="col-md-6">
-                    <label className="form-label">First name</label>
+                  <div className="col-12">
+                    <label className="form-label">Name</label>
                     <input
                       className="form-control"
-                      value={firstName}
-                      onChange={(e) => setFirstName(e.target.value)}
-                    />
-                  </div>
-                  <div className="col-md-6">
-                    <label className="form-label">Last name</label>
-                    <input
-                      className="form-control"
-                      value={lastName}
-                      onChange={(e) => setLastName(e.target.value)}
+                      value={name}
+                      onChange={(e) => setName(e.target.value)}
                     />
                   </div>
 
@@ -163,11 +189,11 @@ const User: React.FC = () => {
                   </div>
 
                   <div className="col-12">
-                    <label className="form-label">City</label>
+                    <label className="form-label">Location</label>
                     <input
                       className="form-control"
-                      value={city}
-                      onChange={(e) => setCity(e.target.value)}
+                      value={location}
+                      onChange={(e) => setLocation(e.target.value)}
                     />
                   </div>
 

@@ -1,13 +1,14 @@
 import React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Header from "../../../components/Header";
 import Footer from "../../../components/Footer";
 import ToolCard from "../../../components/ToolCard";
-import { Tool } from "../../../data/types";
+import { Tool, User } from "../../../data/types";
 
 const List: React.FC = () => {
   const navigate = useNavigate();
+  const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [form, setForm] = useState<{
     name: string;
     description: string;
@@ -21,6 +22,18 @@ const List: React.FC = () => {
     category: "",
     image: null,
   });
+
+  useEffect(() => {
+    // Check if user is logged in
+    const userJson = localStorage.getItem("currentUser");
+    if (!userJson) {
+      // Redirect to login if not logged in
+      alert("Please log in to list a tool");
+      navigate("/login");
+      return;
+    }
+    setCurrentUser(JSON.parse(userJson));
+  }, [navigate]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -41,17 +54,23 @@ const List: React.FC = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
+    if (!currentUser) {
+      alert("Please log in to list a tool");
+      navigate("/login");
+      return;
+    }
+
     // Create new tool with proper structure
     const newTool: Tool = {
-      id: Date.now(), // Use number instead of string
+      id: Date.now(),
       name: form.name,
       description: form.description,
       price: parseFloat(form.price),
       rate: "per day",
       category: form.category,
       image: form.image || "",
-      owner: "Current User", // TODO: Replace with actual logged-in user
-      ownerId: 1, // TODO: Replace with actual logged-in user ID
+      owner: currentUser.name,
+      ownerId: currentUser.id,
     };
 
     // Load existing tools from localStorage
@@ -62,7 +81,15 @@ const List: React.FC = () => {
     const updatedTools = [...existingTools, newTool];
     localStorage.setItem("tools", JSON.stringify(updatedTools));
 
+    // Update user's listing count
+    const updatedUser = {
+      ...currentUser,
+      totalListings: currentUser.totalListings + 1,
+    };
+    localStorage.setItem("currentUser", JSON.stringify(updatedUser));
+
     console.log("New Tool Listed:", newTool);
+    alert(`Tool "${form.name}" listed successfully!`);
 
     // Navigate to browse page to see the new listing
     navigate("/browse");
