@@ -8,6 +8,7 @@ export type Tool = {
   image: string;
   owner: string;
   ownerId: number;
+  listDate: string;
 };
 
 export type ToolPhoto = {
@@ -38,4 +39,5 @@ export type User = {
   totalListings: number;
   verified?: boolean;
   verifiedAt?: string;
+  userImage?: string;
 };

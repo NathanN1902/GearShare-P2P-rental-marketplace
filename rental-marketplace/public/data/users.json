@@ -11,7 +11,8 @@
     "rating": 4.8,
     "totalRentals": 15,
     "totalListings": 3,
-    "verified": false
+    "verified": false,
+    "userImage": "/images/users/john-doe.jpg"
   },
   {
     "id": 2,
@@ -26,7 +27,8 @@
     "totalRentals": 22,
     "totalListings": 8,
     "verified": true,
-    "verifiedAt": "2024-03-01T10:30:00.000Z"
+    "verifiedAt": "2024-03-01T10:30:00.000Z",
+    "userImage": "/images/users/jane-smith.jpg"
   },
   {
     "id": 3,
@@ -40,6 +42,7 @@
     "rating": 5.0,
     "totalRentals": 30,
     "totalListings": 12,
-    "verified": false
+    "verified": false,
+    "userImage": "/images/users/mike-johnson.jpg"
   }
 ]

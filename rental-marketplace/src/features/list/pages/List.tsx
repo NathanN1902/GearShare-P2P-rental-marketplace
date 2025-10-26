@@ -51,7 +51,7 @@ const List: React.FC = () => {
     }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     if (!currentUser) {
@@ -60,9 +60,30 @@ const List: React.FC = () => {
       return;
     }
 
+    // Load existing tools from both JSON file and localStorage
+    const response = await fetch("/data/tools.json");
+    const jsonTools: Tool[] = await response.json();
+
+    const storedTools = localStorage.getItem("tools");
+    const localTools: Tool[] = storedTools ? JSON.parse(storedTools) : [];
+
+    // Merge all tools to check for the highest ID
+    const allTools = [...jsonTools, ...localTools];
+
+    // Generate next sequential ID by finding the highest existing ID
+    const maxId = allTools.length > 0 ? Math.max(...allTools.map(t => t.id)) : 0;
+    const newId = maxId + 1;
+
+    // Format current date as DD-MM-YYYY
+    const today = new Date();
+    const dd = String(today.getDate()).padStart(2, '0');
+    const mm = String(today.getMonth() + 1).padStart(2, '0');
+    const yyyy = today.getFullYear();
+    const formattedDate = `${dd}-${mm}-${yyyy}`;
+
     // Create new tool with proper structure
     const newTool: Tool = {
-      id: Date.now(),
+      id: newId,
       name: form.name,
       description: form.description,
       price: parseFloat(form.price),
@@ -71,11 +92,11 @@ const List: React.FC = () => {
       image: form.image || "",
       owner: currentUser.name,
       ownerId: currentUser.id,
+      listDate: formattedDate,
     };
 
-    // Load existing tools from localStorage
-    const storedTools = localStorage.getItem("tools");
-    const existingTools: Tool[] = storedTools ? JSON.parse(storedTools) : [];
+    // Load existing tools from localStorage (not jsonTools, only user-added tools)
+    const existingTools: Tool[] = localTools;
 
     // Add new tool and save back to localStorage
     const updatedTools = [...existingTools, newTool];

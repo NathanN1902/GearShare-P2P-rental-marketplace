@@ -8,7 +8,8 @@
     "category": "Power Tools",
     "image": "/images/tools/drill-kit-1.jpg",
     "owner": "John Doe",
-    "ownerId": 1
+    "ownerId": 1,
+    "listDate": "20-01-2024"
   },
   {
     "id": 2,
@@ -19,7 +20,8 @@
     "category": "Power Tools",
     "image": "/images/tools/circular-saw.jpg",
     "owner": "Jane Smith",
-    "ownerId": 2
+    "ownerId": 2,
+    "listDate": "25-02-2024"
   },
   {
     "id": 3,
@@ -30,7 +32,8 @@
     "category": "Ladders",
     "image": "/images/tools/ladder.jpg",
     "owner": "Mike Johnson",
-    "ownerId": 3
+    "ownerId": 3,
+    "listDate": "15-03-2024"
   },
   {
     "id": 4,
@@ -41,7 +44,8 @@
     "category": "Power Tools",
     "image": "/images/tools/electric-sander.jpg",
     "owner": "John Doe",
-    "ownerId": 1
+    "ownerId": 1,
+    "listDate": "10-02-2024"
   },
   {
     "id": 5,
@@ -52,7 +56,8 @@
     "category": "Outdoor Tools",
     "image": "/images/tools/pressure-washer.jpg",
     "owner": "Jane Smith",
-    "ownerId": 2
+    "ownerId": 2,
+    "listDate": "05-03-2024"
   },
   {
     "id": 6,
@@ -63,7 +68,8 @@
     "category": "Garden Tools",
     "image": "/images/tools/hedge-trimmer.jpg",
     "owner": "Mike Johnson",
-    "ownerId": 3
+    "ownerId": 3,
+    "listDate": "20-03-2024"
   },
   {
     "id": 7,
@@ -74,7 +80,8 @@
     "category": "Construction Tools",
     "image": "/images/tools/tile-cutter.jpg",
     "owner": "John Doe",
-    "ownerId": 1
+    "ownerId": 1,
+    "listDate": "28-01-2024"
   },
   {
     "id": 8,
@@ -85,7 +92,8 @@
     "category": "Painting Tools",
     "image": "/images/tools/paint-sprayer.jpg",
     "owner": "Jane Smith",
-    "ownerId": 2
+    "ownerId": 2,
+    "listDate": "28-02-2024"
   },
   {
     "id": 9,
@@ -96,7 +104,8 @@
     "category": "Garden Tools",
     "image": "/images/tools/lawn-mower.jpg",
     "owner": "Mike Johnson",
-    "ownerId": 3
+    "ownerId": 3,
+    "listDate": "01-04-2024"
   },
   {
     "id": 10,
@@ -107,7 +116,8 @@
     "category": "Power Tools",
     "image": "/images/tools/belt-sander.jpg",
     "owner": "John Doe",
-    "ownerId": 1
+    "ownerId": 1,
+    "listDate": "15-02-2024"
   },
   {
     "id": 11,
@@ -118,7 +128,8 @@
     "category": "Outdoor Tools",
     "image": "/images/tools/chainsaw.jpg",
     "owner": "Jane Smith",
-    "ownerId": 2
+    "ownerId": 2,
+    "listDate": "10-03-2024"
   },
   {
     "id": 12,
@@ -129,6 +140,7 @@
     "category": "Power Tools",
     "image": "/images/tools/impact-driver.jpg",
     "owner": "Mike Johnson",
-    "ownerId": 3
+    "ownerId": 3,
+    "listDate": "05-04-2024"
   }
 ]

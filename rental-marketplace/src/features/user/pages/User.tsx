@@ -269,7 +269,7 @@ const User: React.FC = () => {
                               <div className="flex-grow-1">
                                 <h6 className="mb-1">{tool.name}</h6>
                                 <small className="text-muted">
-                                  Listed: {new Date(tool.id).toLocaleDateString()}
+                                  Listed: {tool.listDate}
                                   {booking && (
                                     <>
                                       <br />
