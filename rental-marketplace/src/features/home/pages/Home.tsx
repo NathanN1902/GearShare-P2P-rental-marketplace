@@ -4,15 +4,37 @@ import Header from "../../../components/Header";
 import Footer from "../../../components/Footer";
 import SearchBar from "../../../components/SearchBar";
 import ToolCard from "../../../components/ToolCard";
-import type { Tool } from "../../../data/types";
+import type { Tool, User } from "../../../data/types";
+
+// Calculate distance between two coordinates using Haversine formula (in km)
+function calculateDistance(lat1: number, lon1: number, lat2: number, lon2: number): number {
+  const R = 6371; // Earth's radius in kilometers
+  const dLat = (lat2 - lat1) * Math.PI / 180;
+  const dLon = (lon2 - lon1) * Math.PI / 180;
+  const a =
+    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+    Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+    Math.sin(dLon / 2) * Math.sin(dLon / 2);
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  return R * c;
+}
 
 const Home: React.FC = () => {
   const navigate = useNavigate();
   const [tools, setTools] = useState<Tool[]>([]);
+  const [currentUser, setCurrentUser] = useState<User | null>(null);
 
   useEffect(() => {
     const loadTools = async () => {
       try {
+        // Load current user for distance calculation
+        const userJson = localStorage.getItem("currentUser");
+        let user: User | null = null;
+        if (userJson) {
+          user = JSON.parse(userJson);
+          setCurrentUser(user);
+        }
+
         // Load tools from JSON file
         const response = await fetch("/data/tools.json");
         const jsonTools: Tool[] = await response.json();
@@ -22,7 +44,17 @@ const Home: React.FC = () => {
         const localTools: Tool[] = storedTools ? JSON.parse(storedTools) : [];
 
         // Combine both sources
-        const allTools = [...jsonTools, ...localTools];
+        let allTools = [...jsonTools, ...localTools];
+
+        // Sort by distance if user is logged in
+        if (user) {
+          allTools.sort((a, b) => {
+            const distA = calculateDistance(user.latitude, user.longitude, a.latitude, a.longitude);
+            const distB = calculateDistance(user.latitude, user.longitude, b.latitude, b.longitude);
+            return distA - distB;
+          });
+        }
+
         setTools(allTools);
       } catch (error) {
         console.error("Error loading tools:", error);

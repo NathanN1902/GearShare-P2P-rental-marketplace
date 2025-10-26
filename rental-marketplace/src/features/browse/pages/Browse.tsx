@@ -1,4 +1,5 @@
 import React from "react";
+import { useSearchParams } from "react-router-dom";
 import Header from "../../../components/Header";
 import Footer from "../../../components/Footer";
 import ToolCard from "../../../components/ToolCard";
@@ -19,6 +20,7 @@ function calculateDistance(lat1: number, lon1: number, lat2: number, lon2: numbe
 }
 
 const Browse: React.FC = () => {
+  const [searchParams] = useSearchParams();
   const [tools, setTools] = React.useState<Tool[]>([]);
   const [filteredTools, setFilteredTools] = React.useState<Tool[]>([]);
   const [loading, setLoading] = React.useState(true);
@@ -62,7 +64,13 @@ const Browse: React.FC = () => {
     if (userJson) {
       setCurrentUser(JSON.parse(userJson));
     }
-  }, [loadTools]);
+
+    // Read search query from URL parameter
+    const urlQuery = searchParams.get("q");
+    if (urlQuery) {
+      setSearchQuery(urlQuery);
+    }
+  }, [loadTools, searchParams]);
 
   React.useEffect(() => {
     let result = [...tools];

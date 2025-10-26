@@ -22,6 +22,10 @@ const ToolCard: React.FC<{ tool: Tool }> = ({ tool }) => {
           <i className="bi bi-person me-1" />
           {tool.owner}
         </div>
+        <div className="small text-secondary mb-2">
+          <i className="bi bi-geo-alt me-1" />
+          {tool.location}
+        </div>
         <div className="d-flex justify-content-between align-items-center">
           <div className="fw-semibold">${tool.price}/{tool.rate}</div>
           <Link to={`/tools/${tool.id}`} className="btn btn-outline-primary btn-sm">
