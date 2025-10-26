@@ -5,6 +5,10 @@ import Footer from "../../../components/Footer";
 import { fetchToolById } from "../../browse/api";
 import type { Tool } from "../../../data/types";
 
+const SERVICE_ID = import.meta.env.VITE_EMAILJS_SERVICE_ID || "service_p0d535w";
+const TEMPLATE_ID = import.meta.env.VITE_EMAILJS_TEMPLATE_ID || "template_yhzo20s";
+const PUBLIC_KEY = import.meta.env.VITE_EMAILJS_PUBLIC_KEY || "w0oJ4GnkMzxRRUwt6";
+
 const ToolDetails: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const [tool, setTool] = React.useState<Tool | null>(null);
@@ -48,6 +52,21 @@ const ToolDetails: React.FC = () => {
         <Footer />
       </>
     );
+  }
+
+  function sendEmail(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    const form = e.currentTarget;
+    emailjs
+      .sendForm(SERVICE_ID, TEMPLATE_ID, form, PUBLIC_KEY)
+      .then(() => {
+        alert("Booking request sent. Check your email.");
+        form.reset();
+      })
+      .catch((err) => {
+        console.error("EmailJS error", err);
+        alert("Failed to send booking email.");
+      });
   }
 
   return (
