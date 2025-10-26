@@ -1,8 +1,10 @@
 import Header from "../../../components/Header";
 import Footer from "../../../components/Footer";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 export default function Login() {
+  const navigate = useNavigate();
+
   return (
     <>
       <Header />
@@ -13,7 +15,8 @@ export default function Login() {
             className="row g-3"
             onSubmit={(e) => {
               e.preventDefault();
-              alert("Dummy login");
+              // Redirect to browse page after login
+              navigate("/browse");
             }}
           >
             <div className="col-12">
