@@ -4,22 +4,23 @@ from fastapi import FastAPI, HTTPException, Depends
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.core import SessionLocal, engine
-from app.routers import authRouter
+from app.routers import authRouter, itemListingRouter
 from app.utils.init_db import create_tables
 
-# @asynccontextmanager
-# async def lifespan(app: FastAPI):
-#     # Initiate DB
-#     create_tables()
-#     print("Tables created")
-#     # Separator
-#     yield
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    # Initiate DB
+    await create_tables()
+    print("Tables created")
+    # Separator
+    yield
 
 # Create FastAPI app
-app = FastAPI()
+app = FastAPI(lifespan=lifespan)
 
 # Include authentication routers
 app.include_router(authRouter, prefix="/auth", tags=["auth"])
+app.include_router(itemListingRouter, prefix="/items", tags=["itemListing"])
 
 # FastAPI's CORS middleware for frontend applications origins
 origins = [
@@ -35,9 +36,9 @@ app.add_middleware(
 )
 
 # confirm FastAPI is running
-@app.get("/confirm")
+@app.get("/health")
 def app_confirm():
-    return {"status": "Running..."}
+    return {"status": "Healthy..."}
 
 # TODO : Create endpoints
 

@@ -1,6 +1,7 @@
 from app.core.database import Base
 
 from sqlalchemy import Column
+from sqlalchemy import DateTime
 from sqlalchemy import Integer
 from sqlalchemy import ForeignKey
 from sqlalchemy import String
@@ -11,6 +12,7 @@ class Payment(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     amount = Column(Float, nullable=False)
+    date_paid = Column(DateTime, nullable=False)
 
     # TODO: Enforce status (pending, completed, rejected)
     status = Column(String, nullable=False)

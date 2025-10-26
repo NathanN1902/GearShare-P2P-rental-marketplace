@@ -10,6 +10,7 @@ class Chat(Base):
     __tablename__ = "Chats"
 
     id = Column(Integer, primary_key=True, index=True)
+    request_id = Column(Integer, ForeignKey("Rental_Requests.id"))
 
     # TODO: Automatically initiate chat through booking request event
     booking_id = Column(Integer, ForeignKey("Bookings.id"), nullable=False)

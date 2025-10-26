@@ -9,7 +9,7 @@ class Cart_Item(Base):
     __tablename__ = "Cart_Items"
 
     id = Column(Integer, primary_key=True, index=True)
-    quantity = Column(Integer, nullable=False)
+    date_added = Column(DateTime, nullable=False)
 
     # TODO: Implement start_date and end_date validation to avoid double booking
     start_date = Column(DateTime, nullable=False)
