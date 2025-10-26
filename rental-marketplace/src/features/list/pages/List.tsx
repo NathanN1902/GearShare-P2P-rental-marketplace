@@ -35,7 +35,7 @@ const List: React.FC = () => {
     setCurrentUser(JSON.parse(userJson));
   }, [navigate]);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setForm({ ...form, [name]: value});
   };
@@ -127,6 +127,7 @@ const List: React.FC = () => {
                   value={form.name}
                   onChange={handleChange}
                   placeholder="Enter tool name"
+                  required
                 />
               </div>
 
@@ -139,11 +140,12 @@ const List: React.FC = () => {
                   value={form.description}
                   onChange={handleChange}
                   placeholder="Enter tool description"
+                  required
                 />
               </div>
 
               <div className="mb-3">
-                <label className="form-label fw-semibold">Price</label>
+                <label className="form-label fw-semibold">Price (per day)</label>
                 <input
                   className="form-control"
                   type="number"
@@ -151,31 +153,45 @@ const List: React.FC = () => {
                   value={form.price}
                   onChange={handleChange}
                   placeholder="Enter price per day"
+                  min="1"
+                  step="0.01"
+                  required
                 />
               </div>
 
               <div className="mb-3">
                 <label className="form-label fw-semibold">Category</label>
-                <input
-                  className="form-control"
-                  type="text"
+                <select
+                  className="form-select"
                   name="category"
                   value={form.category}
                   onChange={handleChange}
-                  placeholder="e.g., Power Tools, Garden Tools"
-                />
+                  required
+                >
+                  <option value="">Select a category</option>
+                  <option value="Power Tools">Power Tools</option>
+                  <option value="Garden Tools">Garden Tools</option>
+                  <option value="Outdoor Tools">Outdoor Tools</option>
+                  <option value="Construction Tools">Construction Tools</option>
+                  <option value="Painting Tools">Painting Tools</option>
+                  <option value="Ladders">Ladders</option>
+                  <option value="Hand Tools">Hand Tools</option>
+                  <option value="Automotive Tools">Automotive Tools</option>
+                  <option value="Cleaning Tools">Cleaning Tools</option>
+                </select>
               </div>
               
 
-                <label className="form-label">Picture</label>
+                <label className="form-label fw-semibold">Picture</label>
                 <div className="input-group">
                   <input
                     className="form-control"
                     type="file"
-                    accept="image/*,application/pdf"
+                    accept="image/*"
                     onChange={handleImageChange}
+                    required={!form.image}
                   />
-                  <button 
+                  <button
                     className="btn btn-outline-secondary"
                     type="button"
                     onClick={() => setForm({ ...form, image: null })}

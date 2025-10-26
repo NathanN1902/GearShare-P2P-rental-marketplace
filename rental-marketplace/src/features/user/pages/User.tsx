@@ -7,8 +7,10 @@ import Verification from "../components/Verification";
 
 const User: React.FC = () => {
   const navigate = useNavigate();
-  type TabName = "profile" | "listings" | "reviews" | "messages" | "settings";
+  type TabName = "profile" | "listings";
   const [activeTab, setActiveTab] = useState<TabName>("profile");
+  const [userTools, setUserTools] = useState<any[]>([]);
+  const [userBookings, setUserBookings] = useState<any[]>([]);
 
   // User profile data
   const [user, setUser] = useState<UserType | null>(null);
@@ -34,6 +36,30 @@ const User: React.FC = () => {
     setPhone(currentUser.phone);
     setLocation(currentUser.location);
     setBio(currentUser.bio);
+
+    // Load user's tools from both tools.json and localStorage
+    const loadUserTools = async () => {
+      // Load from JSON file
+      const response = await fetch("/data/tools.json");
+      const jsonTools = await response.json();
+
+      // Load from localStorage
+      const storedTools = localStorage.getItem("tools");
+      const localTools = storedTools ? JSON.parse(storedTools) : [];
+
+      // Merge both sources and filter by current user
+      const allTools = [...jsonTools, ...localTools];
+      const myTools = allTools.filter((tool: any) => tool.ownerId === currentUser.id);
+      setUserTools(myTools);
+    };
+
+    loadUserTools();
+
+    // Load bookings for user's tools
+    const storedBookings = localStorage.getItem("bookings");
+    const allBookings = storedBookings ? JSON.parse(storedBookings) : [];
+    const myToolBookings = allBookings.filter((booking: any) => booking.ownerId === currentUser.id);
+    setUserBookings(myToolBookings);
   }, [navigate]);
 
   // Settings toggles
@@ -63,6 +89,30 @@ const User: React.FC = () => {
     localStorage.setItem("currentUser", JSON.stringify(updatedUser));
     setUser(updatedUser);
     alert("Profile updated successfully!");
+  }
+
+  function handleDeleteTool(toolId: number) {
+    if (!window.confirm("Are you sure you want to delete this tool listing?")) {
+      return;
+    }
+
+    // Remove tool from localStorage
+    const storedTools = localStorage.getItem("tools");
+    const allTools = storedTools ? JSON.parse(storedTools) : [];
+    const updatedTools = allTools.filter((tool: any) => tool.id !== toolId);
+    localStorage.setItem("tools", JSON.stringify(updatedTools));
+
+    // Update state to reflect the change
+    setUserTools(userTools.filter((tool) => tool.id !== toolId));
+
+    // Also remove any bookings for this tool
+    const storedBookings = localStorage.getItem("bookings");
+    const allBookings = storedBookings ? JSON.parse(storedBookings) : [];
+    const updatedBookings = allBookings.filter((booking: any) => booking.toolId !== toolId);
+    localStorage.setItem("bookings", JSON.stringify(updatedBookings));
+    setUserBookings(updatedBookings.filter((booking: any) => booking.ownerId === user?.id));
+
+    alert("Tool deleted successfully!");
   }
 
   return (
@@ -117,112 +167,133 @@ const User: React.FC = () => {
           </div>
         </div>
 
-        {/* Tabs (visual only) */}
+        {/* Tabs */}
         <ul className="nav nav-tabs small mb-3">
           <li className="nav-item">
-            <span className="nav-link active">Profile</span>
+            <button
+              className={`nav-link ${activeTab === "profile" ? "active" : ""}`}
+              onClick={() => setActiveTab("profile")}
+            >
+              Profile
+            </button>
           </li>
           <li className="nav-item">
-            <span className="nav-link">Listings</span>
-          </li>
-          <li className="nav-item">
-            <span className="nav-link">Reviews</span>
-          </li>
-          <li className="nav-item">
-            <span className="nav-link">Settings</span>
+            <button
+              className={`nav-link ${activeTab === "listings" ? "active" : ""}`}
+              onClick={() => setActiveTab("listings")}
+            >
+              Listings
+            </button>
           </li>
         </ul>
 
-        {activeTab === "messages" && (
-          <div className="card border-0 shadow-sm">
-            <div className="card-body">
-              <div className="d-flex justify-content-between align-items-center mb-3">
-                <h6 className="mb-0">Messages</h6>
-                <Link to="/messages" className="btn btn-primary btn-sm">
-                  Open Full Messenger
-                </Link>
-              </div>
-              <p className="text-secondary">View and manage your conversations.</p>
-            </div>
-          </div>
-        )}
-
         {/* Main sections */}
         <div className="row g-4">
-          {/* Left column: Profile form */}
+          {/* Left column: Profile form or Listings */}
           <div className="col-lg-8">
-            <div className="card border-0 shadow-sm">
-              <div className="card-body">
-                <h6 className="mb-3">Profile Details</h6>
-                <form className="row g-3" onSubmit={handleSubmitProfile}>
-                  <div className="col-12">
-                    <label className="form-label">Name</label>
-                    <input
-                      className="form-control"
-                      value={name}
-                      onChange={(e) => setName(e.target.value)}
-                    />
-                  </div>
+            {activeTab === "profile" && (
+              <div className="card border-0 shadow-sm">
+                <div className="card-body">
+                  <h6 className="mb-3">Profile Details</h6>
+                  <form className="row g-3" onSubmit={handleSubmitProfile}>
+                    <div className="col-12">
+                      <label className="form-label">Name</label>
+                      <input
+                        className="form-control"
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
+                      />
+                    </div>
 
-                  <div className="col-md-6">
-                    <label className="form-label">Email</label>
-                    <input
-                      type="email"
-                      className="form-control"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                    />
-                  </div>
-                  <div className="col-md-6">
-                    <label className="form-label">Phone</label>
-                    <input
-                      className="form-control"
-                      placeholder="+61 ..."
-                      value={phone}
-                      onChange={(e) => setPhone(e.target.value)}
-                    />
-                  </div>
+                    <div className="col-md-6">
+                      <label className="form-label">Email</label>
+                      <input
+                        type="email"
+                        className="form-control"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                      />
+                    </div>
+                    <div className="col-md-6">
+                      <label className="form-label">Phone</label>
+                      <input
+                        className="form-control"
+                        placeholder="+61 ..."
+                        value={phone}
+                        onChange={(e) => setPhone(e.target.value)}
+                      />
+                    </div>
 
-                  <div className="col-12">
-                    <label className="form-label">Location</label>
-                    <input
-                      className="form-control"
-                      value={location}
-                      onChange={(e) => setLocation(e.target.value)}
-                    />
-                  </div>
+                    <div className="col-12">
+                      <label className="form-label">Location</label>
+                      <input
+                        className="form-control"
+                        value={location}
+                        onChange={(e) => setLocation(e.target.value)}
+                      />
+                    </div>
 
-                  <div className="col-12">
-                    <label className="form-label">Bio</label>
-                    <textarea
-                      className="form-control"
-                      rows={4}
-                      value={bio}
-                      onChange={(e) => setBio(e.target.value)}
-                    />
-                  </div>
+                    <div className="col-12">
+                      <label className="form-label">Bio</label>
+                      <textarea
+                        className="form-control"
+                        rows={4}
+                        value={bio}
+                        onChange={(e) => setBio(e.target.value)}
+                      />
+                    </div>
 
-                  <div className="col-md-4">
-                    <label className="form-label">Skills</label>
-                    <input className="form-control" placeholder="e.g., Carpentry" />
-                  </div>
-                  <div className="col-md-4">
-                    <label className="form-label">Preferred radius</label>
-                    <input className="form-control" placeholder="10 km" />
-                  </div>
-                  <div className="col-md-4">
-                    <label className="form-label">Availability</label>
-                    <input className="form-control" placeholder="Weekends" />
-                  </div>
-
-                  <div className="col-12">
-                    <button className="btn btn-primary" type="submit">
-                      Save changes
-                    </button>
-                  </div>
-                </form>
+                    <div className="col-12">
+                      <button className="btn btn-primary" type="submit">
+                        Save changes
+                      </button>
+                    </div>
+                  </form>
+                </div>
               </div>
-            </div>
+            )}
+
+            {activeTab === "listings" && (
+              <div className="card border-0 shadow-sm">
+                <div className="card-body">
+                  <h6 className="mb-3">My Listings</h6>
+                  {userTools.length === 0 ? (
+                    <p className="text-secondary">You currently do not have any listed tool</p>
+                  ) : (
+                    <div className="list-group">
+                      {userTools.map((tool) => {
+                        const booking = userBookings.find((b: any) => b.toolId === tool.id);
+                        return (
+                          <div key={tool.id} className="list-group-item">
+                            <div className="d-flex justify-content-between align-items-start">
+                              <div className="flex-grow-1">
+                                <h6 className="mb-1">{tool.name}</h6>
+                                <small className="text-muted">
+                                  Listed: {new Date(tool.id).toLocaleDateString()}
+                                  {booking && (
+                                    <>
+                                      <br />
+                                      Rented by: {booking.renterName} ({booking.startDate} - {booking.endDate})
+                                    </>
+                                  )}
+                                </small>
+                              </div>
+                              <button
+                                className="btn btn-sm btn-outline-danger"
+                                onClick={() => handleDeleteTool(tool.id)}
+                              >
+                                <i className="bi bi-trash me-1"></i>
+                                Delete
+                              </button>
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
           </div>
 
           {/* Right column: Verification + Settings */}

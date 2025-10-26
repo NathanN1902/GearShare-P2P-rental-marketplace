@@ -32,6 +32,15 @@ const Home: React.FC = () => {
     loadTools();
   }, []);
 
+  // const [tools, setTools] = React.useState([]);
+
+  // React.useEffect(() => {
+  //   fetch('/data/tools.json')
+  //     .then(res => res.json())
+  //     .then(data => setTools(data))
+  //     .catch(err => console.error(err));
+  // }, []);
+
   const handleSearch = (query: string) => {
     // Navigate to browse page with search query
     navigate(`/browse?q=${encodeURIComponent(query)}`);
@@ -46,7 +55,7 @@ const Home: React.FC = () => {
         <section className="text-center mb-5">
           <h1 className="mb-3">Welcome to GearShare</h1>
           <p className="lead text-muted">
-            PLACEHOLDER SLOGAN
+            Looking to rent something short term? You've come to the right place!
           </p>
 
           <div className="d-flex justify-content-center mt-4">
@@ -66,7 +75,7 @@ const Home: React.FC = () => {
           </div>
 
           <div className="row g-3">
-            {tools.slice(0, 6).map((tool) => (
+            {tools.slice(0, 12).map((tool) => (
               <div className="col-12 col-sm-6 col-lg-4" key={tool.id}>
                 <ToolCard tool={tool} />
               </div>
@@ -76,11 +85,11 @@ const Home: React.FC = () => {
 
         {/* Call to action */}
         <section className="text-center py-5 bg-light rounded">
-          <h3>PLACEHOLDER CTA?</h3>
+          <h3>Ready to rent out your tools?</h3>
           <p className="text-muted">
-            List your tool
+            It is so easy!
           </p>
-          <Link to="/user" className="btn btn-primary">
+          <Link to="/list" className="btn btn-primary">
             List your tool
           </Link>
         </section>

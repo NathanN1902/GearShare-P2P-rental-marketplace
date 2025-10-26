@@ -6,7 +6,7 @@
     "price": 25,
     "rate": "per day",
     "category": "Power Tools",
-    "image": "https://images.unsplash.com/photo-1504148455328-c376907d081c?w=500",
+    "image": "/images/tools/drill-kit-1.jpg",
     "owner": "John Doe",
     "ownerId": 1
   },
@@ -17,7 +17,7 @@
     "price": 30,
     "rate": "per day",
     "category": "Power Tools",
-    "image": "https://images.unsplash.com/photo-1572981779307-38b8cabb2407?w=500",
+    "image": "/images/tools/circular-saw.jpg",
     "owner": "Jane Smith",
     "ownerId": 2
   },
@@ -28,7 +28,7 @@
     "price": 15,
     "rate": "per day",
     "category": "Ladders",
-    "image": "https://images.unsplash.com/photo-1581244277943-fe4a9c777189?w=500",
+    "image": "/images/tools/ladder.jpg",
     "owner": "Mike Johnson",
     "ownerId": 3
   },
@@ -39,7 +39,7 @@
     "price": 20,
     "rate": "per day",
     "category": "Power Tools",
-    "image": "https://images.unsplash.com/photo-1606403111690-6f8797dc44a5?w=500",
+    "image": "/images/tools/electric-sander.jpg",
     "owner": "John Doe",
     "ownerId": 1
   },
@@ -50,7 +50,7 @@
     "price": 35,
     "rate": "per day",
     "category": "Outdoor Tools",
-    "image": "https://images.unsplash.com/photo-1581578731548-c64695cc6952?w=500",
+    "image": "/images/tools/pressure-washer.jpg",
     "owner": "Jane Smith",
     "ownerId": 2
   },
@@ -61,7 +61,7 @@
     "price": 18,
     "rate": "per day",
     "category": "Garden Tools",
-    "image": "https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=500",
+    "image": "/images/tools/hedge-trimmer.jpg",
     "owner": "Mike Johnson",
     "ownerId": 3
   },
@@ -72,7 +72,7 @@
     "price": 22,
     "rate": "per day",
     "category": "Construction Tools",
-    "image": "https://images.unsplash.com/photo-1621905251189-08b45d6a269e?w=500",
+    "image": "/images/tools/tile-cutter.jpg",
     "owner": "John Doe",
     "ownerId": 1
   },
@@ -83,7 +83,7 @@
     "price": 28,
     "rate": "per day",
     "category": "Painting Tools",
-    "image": "https://images.unsplash.com/photo-1562259949-e8e7689d7828?w=500",
+    "image": "/images/tools/paint-sprayer.jpg",
     "owner": "Jane Smith",
     "ownerId": 2
   },
@@ -94,7 +94,7 @@
     "price": 32,
     "rate": "per day",
     "category": "Garden Tools",
-    "image": "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=500",
+    "image": "/images/tools/lawn-mower.jpg",
     "owner": "Mike Johnson",
     "ownerId": 3
   },
@@ -105,7 +105,7 @@
     "price": 24,
     "rate": "per day",
     "category": "Power Tools",
-    "image": "https://images.unsplash.com/photo-1572981779307-38b8cabb2407?w=500",
+    "image": "/images/tools/belt-sander.jpg",
     "owner": "John Doe",
     "ownerId": 1
   },
@@ -116,7 +116,7 @@
     "price": 40,
     "rate": "per day",
     "category": "Outdoor Tools",
-    "image": "https://images.unsplash.com/photo-1617420820178-d5c6609a0604?w=500",
+    "image": "/images/tools/chainsaw.jpg",
     "owner": "Jane Smith",
     "ownerId": 2
   },
@@ -127,7 +127,7 @@
     "price": 20,
     "rate": "per day",
     "category": "Power Tools",
-    "image": "https://images.unsplash.com/photo-1530124566582-a618bc2615dc?w=500",
+    "image": "/images/tools/impact-driver.jpg",
     "owner": "Mike Johnson",
     "ownerId": 3
   }
