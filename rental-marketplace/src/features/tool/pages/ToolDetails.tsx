@@ -7,9 +7,9 @@ import { fetchToolById } from "../../browse/api";
 import type { Tool, User } from "../../../data/types";
 
 // EmailJS configuration - you'll need to set these up at emailjs.com
-const EMAILJS_SERVICE_ID = "service_YOUR_ID"; // Replace with your service ID
-const EMAILJS_TEMPLATE_ID = "template_YOUR_ID"; // Replace with your template ID
-const EMAILJS_PUBLIC_KEY = "YOUR_PUBLIC_KEY"; // Replace with your public key
+const EMAILJS_SERVICE_ID = "service_wcxvrwg"; // Replace with your service ID
+const EMAILJS_TEMPLATE_ID = "template_c5z126r"; // Replace with your template ID
+const EMAILJS_PUBLIC_KEY = "_JziDl6sF9SNSCON8"; // Replace with your public key
 
 interface Booking {
   id: number;

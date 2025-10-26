@@ -73,9 +73,11 @@ const User: React.FC = () => {
     navigate("/login");
   };
 
-  function handleSubmitProfile(e: React.FormEvent) {
+  async function handleSubmitProfile(e: React.FormEvent) {
     e.preventDefault();
     if (!user) return;
+
+    const locationChanged = location !== user.location;
 
     // Update user in localStorage
     const updatedUser = {
@@ -88,7 +90,40 @@ const User: React.FC = () => {
     };
     localStorage.setItem("currentUser", JSON.stringify(updatedUser));
     setUser(updatedUser);
-    alert("Profile updated successfully!");
+
+    // If location changed, update all tools owned by this user
+    if (locationChanged) {
+      // Load tools from both sources
+      const response = await fetch("/data/tools.json");
+      const jsonTools = await response.json();
+
+      const storedTools = localStorage.getItem("tools");
+      const localTools = storedTools ? JSON.parse(storedTools) : [];
+
+      // Update all local tools owned by this user
+      const updatedLocalTools = localTools.map((tool: any) => {
+        if (tool.ownerId === user.id) {
+          return {
+            ...tool,
+            location: location,
+            // Note: latitude/longitude remain the same
+            // In production, you would use a geocoding API to update coordinates
+          };
+        }
+        return tool;
+      });
+
+      localStorage.setItem("tools", JSON.stringify(updatedLocalTools));
+
+      // Reload user's tools to reflect the change
+      const allTools = [...jsonTools, ...updatedLocalTools];
+      const myTools = allTools.filter((tool: any) => tool.ownerId === user.id);
+      setUserTools(myTools);
+
+      alert("Profile updated successfully! All your tool listings have been updated with the new location.");
+    } else {
+      alert("Profile updated successfully!");
+    }
   }
 
   function handleDeleteTool(toolId: number) {
@@ -136,14 +171,24 @@ const User: React.FC = () => {
         {/* Profile */}
         <div className="card border-0 shadow-sm mb-3">
           <div className="card-body d-flex align-items-start gap-3">
-            <div
-              className="rounded-circle bg-light border"
-              style={{ width: 72, height: 72 }}
-            />
+            {user?.userImage ? (
+              <img
+                src={user.userImage}
+                alt={user.name}
+                className="rounded-circle border"
+                style={{ width: 72, height: 72, objectFit: "cover" }}
+              />
+            ) : (
+              <div
+                className="rounded-circle bg-light border d-flex align-items-center justify-content-center"
+                style={{ width: 72, height: 72 }}
+              >
+                <i className="bi bi-person" style={{ fontSize: "2rem" }}></i>
+              </div>
+            )}
             <div className="flex-grow-1">
               <div className="d-flex flex-wrap align-items-center gap-2">
                 <h5 className="mb-0">{user?.name || "Loading..."}</h5>
-                <span className="badge text-bg-secondary">Member</span>
                 {user?.verified ? (
                   <span className="badge text-bg-success">
                     <i className="bi bi-shield-check me-1" />
@@ -155,13 +200,10 @@ const User: React.FC = () => {
                     Not Verified
                   </span>
                 )}
-                <span className="badge text-bg-light border text-muted">
-                  {user?.location || ""}
-                </span>
               </div>
               <div className="text-secondary small mt-2">
                 <i className="bi bi-geo-alt me-1" />
-                {user?.location || ""} • Member since {user?.memberSince ? new Date(user.memberSince).getFullYear() : ""} • {user?.totalRentals || 0} completed rentals • {user?.totalListings || 0} listings
+                {user?.location || ""} • Member since {user?.memberSince || ""}
               </div>
             </div>
           </div>

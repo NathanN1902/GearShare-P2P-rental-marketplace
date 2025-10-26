@@ -14,7 +14,7 @@
     "totalRentals": 15,
     "totalListings": 3,
     "verified": false,
-    "userImage": "/images/users/john-doe.jpg"
+    "userImage": "https://ui-avatars.com/api/?name=John+Doe&size=200&background=0D8ABC&color=fff"
   },
   {
     "id": 2,
@@ -32,7 +32,7 @@
     "totalListings": 8,
     "verified": true,
     "verifiedAt": "2024-03-01T10:30:00.000Z",
-    "userImage": "/images/users/jane-smith.jpg"
+    "userImage": "https://ui-avatars.com/api/?name=Jane+Smith&size=200&background=10B981&color=fff"
   },
   {
     "id": 3,
@@ -49,6 +49,6 @@
     "totalRentals": 30,
     "totalListings": 12,
     "verified": false,
-    "userImage": "/images/users/mike-johnson.jpg"
+    "userImage": "https://ui-avatars.com/api/?name=Mike+Johnson&size=200&background=F59E0B&color=fff"
   }
 ]
