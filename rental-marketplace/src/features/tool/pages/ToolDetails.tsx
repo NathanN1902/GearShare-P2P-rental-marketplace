@@ -1,9 +1,32 @@
 import React from "react";
 import { useParams, Link } from "react-router-dom";
+import emailjs from "@emailjs/browser";
 import Header from "../../../components/Header";
 import Footer from "../../../components/Footer";
 import { fetchToolById } from "../../browse/api";
 import type { Tool } from "../../../data/types";
+
+// EmailJS configuration - you'll need to set these up at emailjs.com
+const EMAILJS_SERVICE_ID = "service_YOUR_ID"; // Replace with your service ID
+const EMAILJS_TEMPLATE_ID = "template_YOUR_ID"; // Replace with your template ID
+const EMAILJS_PUBLIC_KEY = "YOUR_PUBLIC_KEY"; // Replace with your public key
+
+interface Booking {
+  id: number;
+  toolId: number;
+  toolName: string;
+  ownerId: number;
+  ownerName: string;
+  renterId: number;
+  renterName: string;
+  renterEmail: string;
+  startDate: string;
+  endDate: string;
+  pricePerDay: number;
+  totalPrice: number;
+  status: "pending" | "confirmed" | "rejected";
+  createdAt: string;
+}
 
 const ToolDetails: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -11,6 +34,9 @@ const ToolDetails: React.FC = () => {
   const [loading, setLoading] = React.useState(true);
   const [startDate, setStartDate] = React.useState("");
   const [endDate, setEndDate] = React.useState("");
+  const [renterName, setRenterName] = React.useState("");
+  const [renterEmail, setRenterEmail] = React.useState("");
+  const [bookingSubmitted, setBookingSubmitted] = React.useState(false);
 
   React.useEffect(() => {
     if (!id) return;
@@ -18,6 +44,7 @@ const ToolDetails: React.FC = () => {
     (async () => {
       try {
         const data = await fetchToolById(id);
+        console.log("Fetched tool data:", data);
         if (alive) setTool(data ?? null);
       } finally {
         if (alive) setLoading(false);
@@ -52,14 +79,87 @@ const ToolDetails: React.FC = () => {
     );
   }
 
-  const handleBooking = (e: React.FormEvent<HTMLFormElement>) => {
+  const calculateDays = (start: string, end: string): number => {
+    const startDate = new Date(start);
+    const endDate = new Date(end);
+    const diffTime = Math.abs(endDate.getTime() - startDate.getTime());
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    return diffDays || 1; // At least 1 day
+  };
+
+  const handleBooking = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
     if (!startDate || !endDate) {
       alert("Please select both start and end dates");
       return;
     }
-    alert(`Booking request for ${tool.name} from ${startDate} to ${endDate}`);
-    // TODO: Implement actual booking logic
+
+    if (!renterName || !renterEmail) {
+      alert("Please provide your name and email");
+      return;
+    }
+
+    const days = calculateDays(startDate, endDate);
+    const totalPrice = days * tool.price;
+
+    // Create booking object
+    const newBooking: Booking = {
+      id: Date.now(),
+      toolId: tool.id,
+      toolName: tool.name,
+      ownerId: tool.ownerId,
+      ownerName: tool.owner,
+      renterId: 999, // TODO: Replace with actual logged-in user ID
+      renterName: renterName,
+      renterEmail: renterEmail,
+      startDate: startDate,
+      endDate: endDate,
+      pricePerDay: tool.price,
+      totalPrice: totalPrice,
+      status: "pending",
+      createdAt: new Date().toISOString(),
+    };
+
+    try {
+      // Save to localStorage (since we can't write to JSON directly from browser)
+      const existingBookings = localStorage.getItem("bookings");
+      const bookings: Booking[] = existingBookings ? JSON.parse(existingBookings) : [];
+      bookings.push(newBooking);
+      localStorage.setItem("bookings", JSON.stringify(bookings));
+
+      // Send email notification to owner using EmailJS
+      try {
+        await emailjs.send(
+          EMAILJS_SERVICE_ID,
+          EMAILJS_TEMPLATE_ID,
+          {
+            to_email: "owner@example.com", // TODO: Replace with actual owner email
+            tool_name: tool.name,
+            renter_name: renterName,
+            renter_email: renterEmail,
+            start_date: startDate,
+            end_date: endDate,
+            days: days,
+            price_per_day: tool.price,
+            total_price: totalPrice,
+            owner_name: tool.owner,
+          },
+          EMAILJS_PUBLIC_KEY
+        );
+
+        setBookingSubmitted(true);
+        alert(`Booking request submitted successfully! Total: $${totalPrice} for ${days} day(s). The owner will be notified via email.`);
+      } catch (emailError) {
+        console.error("Email sending failed:", emailError);
+        // Still save the booking even if email fails
+        setBookingSubmitted(true);
+        alert(`Booking request saved! Total: $${totalPrice} for ${days} day(s). (Note: Email notification failed - you may need to configure EmailJS)`);
+      }
+    } catch (error) {
+      console.error("Booking failed:", error);
+      alert("Failed to submit booking. Please try again.");
+    }
   };
 
   return (
@@ -99,41 +199,84 @@ const ToolDetails: React.FC = () => {
                 <h4 className="card-title mb-3">Book This Tool</h4>
                 <p className="h5 text-primary mb-4">${tool.price}/{tool.rate}</p>
 
-                <form onSubmit={handleBooking}>
-                  <div className="mb-3">
-                    <label htmlFor="startDate" className="form-label fw-semibold">
-                      Start Date
-                    </label>
-                    <input
-                      type="date"
-                      className="form-control"
-                      id="startDate"
-                      value={startDate}
-                      onChange={(e) => setStartDate(e.target.value)}
-                      min={new Date().toISOString().split("T")[0]}
-                      required
-                    />
+                {bookingSubmitted ? (
+                  <div className="alert alert-success">
+                    <i className="bi bi-check-circle me-2"></i>
+                    Booking request submitted! The owner will contact you soon.
                   </div>
+                ) : (
+                  <form onSubmit={handleBooking}>
+                    <div className="mb-3">
+                      <label htmlFor="renterName" className="form-label fw-semibold">
+                        Your Name
+                      </label>
+                      <input
+                        type="text"
+                        className="form-control"
+                        id="renterName"
+                        value={renterName}
+                        onChange={(e) => setRenterName(e.target.value)}
+                        required
+                      />
+                    </div>
 
-                  <div className="mb-3">
-                    <label htmlFor="endDate" className="form-label fw-semibold">
-                      End Date
-                    </label>
-                    <input
-                      type="date"
-                      className="form-control"
-                      id="endDate"
-                      value={endDate}
-                      onChange={(e) => setEndDate(e.target.value)}
-                      min={startDate || new Date().toISOString().split("T")[0]}
-                      required
-                    />
-                  </div>
+                    <div className="mb-3">
+                      <label htmlFor="renterEmail" className="form-label fw-semibold">
+                        Your Email
+                      </label>
+                      <input
+                        type="email"
+                        className="form-control"
+                        id="renterEmail"
+                        value={renterEmail}
+                        onChange={(e) => setRenterEmail(e.target.value)}
+                        required
+                      />
+                    </div>
 
-                  <button type="submit" className="btn btn-primary w-100">
-                    Request Booking
-                  </button>
-                </form>
+                    <div className="mb-3">
+                      <label htmlFor="startDate" className="form-label fw-semibold">
+                        Start Date
+                      </label>
+                      <input
+                        type="date"
+                        className="form-control"
+                        id="startDate"
+                        value={startDate}
+                        onChange={(e) => setStartDate(e.target.value)}
+                        min={new Date().toISOString().split("T")[0]}
+                        required
+                      />
+                    </div>
+
+                    <div className="mb-3">
+                      <label htmlFor="endDate" className="form-label fw-semibold">
+                        End Date
+                      </label>
+                      <input
+                        type="date"
+                        className="form-control"
+                        id="endDate"
+                        value={endDate}
+                        onChange={(e) => setEndDate(e.target.value)}
+                        min={startDate || new Date().toISOString().split("T")[0]}
+                        required
+                      />
+                    </div>
+
+                    {startDate && endDate && (
+                      <div className="alert alert-info mb-3">
+                        <strong>Total: ${calculateDays(startDate, endDate) * tool.price}</strong>
+                        <br />
+                        ({calculateDays(startDate, endDate)} day(s) × ${tool.price}/day)
+                      </div>
+                    )}
+
+                    <button type="submit" className="btn btn-primary w-100">
+                      Request Booking
+                    </button>
+                  </form>
+                )}
               </div>
             </div>
           </div>
