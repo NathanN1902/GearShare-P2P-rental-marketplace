@@ -9,7 +9,10 @@
     "image": "/images/tools/drill-kit-1.jpg",
     "owner": "John Doe",
     "ownerId": 1,
-    "listDate": "20-01-2024"
+    "listDate": "20-01-2024",
+    "location": "Sydney, NSW",
+    "latitude": -33.8688,
+    "longitude": 151.2093
   },
   {
     "id": 2,
@@ -21,7 +24,10 @@
     "image": "/images/tools/circular-saw.jpg",
     "owner": "Jane Smith",
     "ownerId": 2,
-    "listDate": "25-02-2024"
+    "listDate": "25-02-2024",
+    "location": "Melbourne, VIC",
+    "latitude": -37.8136,
+    "longitude": 144.9631
   },
   {
     "id": 3,
@@ -33,7 +39,10 @@
     "image": "/images/tools/ladder.jpg",
     "owner": "Mike Johnson",
     "ownerId": 3,
-    "listDate": "15-03-2024"
+    "listDate": "15-03-2024",
+    "location": "Brisbane, QLD",
+    "latitude": -27.4698,
+    "longitude": 153.0251
   },
   {
     "id": 4,
@@ -45,7 +54,10 @@
     "image": "/images/tools/electric-sander.jpg",
     "owner": "John Doe",
     "ownerId": 1,
-    "listDate": "10-02-2024"
+    "listDate": "10-02-2024",
+    "location": "Sydney, NSW",
+    "latitude": -33.8688,
+    "longitude": 151.2093
   },
   {
     "id": 5,
@@ -57,7 +69,10 @@
     "image": "/images/tools/pressure-washer.jpg",
     "owner": "Jane Smith",
     "ownerId": 2,
-    "listDate": "05-03-2024"
+    "listDate": "05-03-2024",
+    "location": "Melbourne, VIC",
+    "latitude": -37.8136,
+    "longitude": 144.9631
   },
   {
     "id": 6,
@@ -69,7 +84,10 @@
     "image": "/images/tools/hedge-trimmer.jpg",
     "owner": "Mike Johnson",
     "ownerId": 3,
-    "listDate": "20-03-2024"
+    "listDate": "20-03-2024",
+    "location": "Brisbane, QLD",
+    "latitude": -27.4698,
+    "longitude": 153.0251
   },
   {
     "id": 7,
@@ -81,7 +99,10 @@
     "image": "/images/tools/tile-cutter.jpg",
     "owner": "John Doe",
     "ownerId": 1,
-    "listDate": "28-01-2024"
+    "listDate": "28-01-2024",
+    "location": "Sydney, NSW",
+    "latitude": -33.8688,
+    "longitude": 151.2093
   },
   {
     "id": 8,
@@ -93,7 +114,10 @@
     "image": "/images/tools/paint-sprayer.jpg",
     "owner": "Jane Smith",
     "ownerId": 2,
-    "listDate": "28-02-2024"
+    "listDate": "28-02-2024",
+    "location": "Melbourne, VIC",
+    "latitude": -37.8136,
+    "longitude": 144.9631
   },
   {
     "id": 9,
@@ -105,7 +129,10 @@
     "image": "/images/tools/lawn-mower.jpg",
     "owner": "Mike Johnson",
     "ownerId": 3,
-    "listDate": "01-04-2024"
+    "listDate": "01-04-2024",
+    "location": "Brisbane, QLD",
+    "latitude": -27.4698,
+    "longitude": 153.0251
   },
   {
     "id": 10,
@@ -117,7 +144,10 @@
     "image": "/images/tools/belt-sander.jpg",
     "owner": "John Doe",
     "ownerId": 1,
-    "listDate": "15-02-2024"
+    "listDate": "15-02-2024",
+    "location": "Sydney, NSW",
+    "latitude": -33.8688,
+    "longitude": 151.2093
   },
   {
     "id": 11,
@@ -129,7 +159,10 @@
     "image": "/images/tools/chainsaw.jpg",
     "owner": "Jane Smith",
     "ownerId": 2,
-    "listDate": "10-03-2024"
+    "listDate": "10-03-2024",
+    "location": "Melbourne, VIC",
+    "latitude": -37.8136,
+    "longitude": 144.9631
   },
   {
     "id": 12,
@@ -141,6 +174,9 @@
     "image": "/images/tools/impact-driver.jpg",
     "owner": "Mike Johnson",
     "ownerId": 3,
-    "listDate": "05-04-2024"
+    "listDate": "05-04-2024",
+    "location": "Brisbane, QLD",
+    "latitude": -27.4698,
+    "longitude": 153.0251
   }
 ]

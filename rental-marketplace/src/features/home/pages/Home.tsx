@@ -67,19 +67,22 @@ const Home: React.FC = () => {
 
         {/* Nearby tools */}
         <section className="mb-5">
-          <div className="d-flex justify-content-between align-items-center mb-3">
+          <div className="mb-3">
             <h2 className="h4 mb-0">Nearby Tools</h2>
-            <Link to="/browse" className="btn btn-outline-primary btn-sm">
-              See All
-            </Link>
           </div>
 
-          <div className="row g-3">
+          <div className="row g-3 mb-4">
             {tools.slice(0, 12).map((tool) => (
               <div className="col-12 col-sm-6 col-lg-4" key={tool.id}>
                 <ToolCard tool={tool} />
               </div>
             ))}
+          </div>
+
+          <div className="text-center">
+            <Link to="/browse" className="btn btn-primary btn-lg px-5">
+              See all tools available
+            </Link>
           </div>
         </section>
 

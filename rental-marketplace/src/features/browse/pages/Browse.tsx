@@ -3,17 +3,19 @@ import Header from "../../../components/Header";
 import Footer from "../../../components/Footer";
 import ToolCard from "../../../components/ToolCard";
 import Skeleton from "../../../components/Skeleton";
+import type { Tool, User } from "../../../data/types";
 
-interface Tool {
-  id: number;
-  name: string;
-  description: string;
-  price: number;
-  rate: string;
-  category: string;
-  image: string;
-  owner: string;
-  ownerId: number;
+// Calculate distance between two coordinates using Haversine formula (in km)
+function calculateDistance(lat1: number, lon1: number, lat2: number, lon2: number): number {
+  const R = 6371; // Earth's radius in kilometers
+  const dLat = (lat2 - lat1) * Math.PI / 180;
+  const dLon = (lon2 - lon1) * Math.PI / 180;
+  const a =
+    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+    Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+    Math.sin(dLon / 2) * Math.sin(dLon / 2);
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  return R * c;
 }
 
 const Browse: React.FC = () => {
@@ -21,6 +23,7 @@ const Browse: React.FC = () => {
   const [filteredTools, setFilteredTools] = React.useState<Tool[]>([]);
   const [loading, setLoading] = React.useState(true);
   const [error, setError] = React.useState<string | null>(null);
+  const [currentUser, setCurrentUser] = React.useState<User | null>(null);
 
   const [searchQuery, setSearchQuery] = React.useState("");
   const [priceMin, setPriceMin] = React.useState<number | undefined>(undefined);
@@ -53,6 +56,12 @@ const Browse: React.FC = () => {
 
   React.useEffect(() => {
     loadTools();
+
+    // Load current user for distance calculation
+    const userJson = localStorage.getItem("currentUser");
+    if (userJson) {
+      setCurrentUser(JSON.parse(userJson));
+    }
   }, [loadTools]);
 
   React.useEffect(() => {
@@ -79,12 +88,17 @@ const Browse: React.FC = () => {
       result.sort((a, b) => a.price - b.price);
     } else if (sort === "price-desc") {
       result.sort((a, b) => b.price - a.price);
-    } else if (sort === "name-asc") {
-      result.sort((a, b) => a.name.localeCompare(b.name));
+    } else if (sort === "distance" && currentUser) {
+      // Sort by distance from current user
+      result.sort((a, b) => {
+        const distA = calculateDistance(currentUser.latitude, currentUser.longitude, a.latitude, a.longitude);
+        const distB = calculateDistance(currentUser.latitude, currentUser.longitude, b.latitude, b.longitude);
+        return distA - distB;
+      });
     }
 
     setFilteredTools(result);
-  }, [tools, searchQuery, priceMin, priceMax, sort]);
+  }, [tools, searchQuery, priceMin, priceMax, sort, currentUser]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -155,7 +169,9 @@ const Browse: React.FC = () => {
               <option value="">Sort by…</option>
               <option value="price-asc">Price: Low → High</option>
               <option value="price-desc">Price: High → Low</option>
-              <option value="name-asc">Name: A → Z</option>
+              <option value="distance" disabled={!currentUser}>
+                Distance: Nearest First {!currentUser && "(Login required)"}
+              </option>
             </select>
           </div>
 

@@ -296,6 +296,28 @@ const ToolDetails: React.FC = () => {
           <h5>Description</h5>
           <p>{tool.description || "No description provided."}</p>
         </section>
+
+        {/* Location Map section */}
+        <section className="mt-5">
+          <h5>Location</h5>
+          <p className="text-muted">
+            <i className="bi bi-geo-alt me-2"></i>
+            {tool.location}
+          </p>
+          <div className="border rounded overflow-hidden" style={{ height: "400px" }}>
+            <iframe
+              width="100%"
+              height="100%"
+              style={{ border: 0 }}
+              src={`https://www.openstreetmap.org/export/embed.html?bbox=${tool.longitude - 0.01},${tool.latitude - 0.01},${tool.longitude + 0.01},${tool.latitude + 0.01}&layer=mapnik&marker=${tool.latitude},${tool.longitude}`}
+              allowFullScreen
+              title="Tool Location Map"
+            ></iframe>
+          </div>
+          <p className="text-muted small mt-2">
+            * This is an approximate location for privacy. Exact address will be shared after booking confirmation.
+          </p>
+        </section>
       </main>
       <Footer />
     </>

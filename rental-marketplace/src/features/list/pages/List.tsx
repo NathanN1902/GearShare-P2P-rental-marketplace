@@ -82,6 +82,7 @@ const List: React.FC = () => {
     const formattedDate = `${dd}-${mm}-${yyyy}`;
 
     // Create new tool with proper structure
+    // Tool location is based on the owner's location
     const newTool: Tool = {
       id: newId,
       name: form.name,
@@ -93,6 +94,9 @@ const List: React.FC = () => {
       owner: currentUser.name,
       ownerId: currentUser.id,
       listDate: formattedDate,
+      location: currentUser.location,
+      latitude: currentUser.latitude,
+      longitude: currentUser.longitude,
     };
 
     // Load existing tools from localStorage (not jsonTools, only user-added tools)

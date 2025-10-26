@@ -9,6 +9,9 @@ export type Tool = {
   owner: string;
   ownerId: number;
   listDate: string;
+  location: string;
+  latitude: number;
+  longitude: number;
 };
 
 export type ToolPhoto = {
@@ -32,6 +35,8 @@ export type User = {
   password: string;
   phone: string;
   location: string;
+  latitude: number;
+  longitude: number;
   bio: string;
   memberSince: string;
   rating: number;

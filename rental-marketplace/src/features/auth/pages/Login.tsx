@@ -92,6 +92,14 @@ export default function Login() {
             </div>
             <div className="col-12 text-center">
               <span className="small text-secondary">
+                Don't have an account?{" "}
+                <Link to="/register" className="text-primary">
+                  Create an account
+                </Link>
+              </span>
+            </div>
+            <div className="col-12 text-center">
+              <span className="small text-secondary">
                 Demo accounts: john@example.com, jane@example.com, mike@example.com
                 <br />
                 Password: password123
