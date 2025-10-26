@@ -3,56 +3,98 @@ import Header from "../../../components/Header";
 import Footer from "../../../components/Footer";
 import ToolCard from "../../../components/ToolCard";
 import Skeleton from "../../../components/Skeleton";
-import { fetchTools, type SortOrder } from "../api";
-import type { Tool } from "../../../data/types";
+
+interface Tool {
+  id: number;
+  name: string;
+  description: string;
+  price: number;
+  rate: string;
+  category: string;
+  image: string;
+  owner: string;
+  ownerId: number;
+}
 
 const Browse: React.FC = () => {
   const [tools, setTools] = React.useState<Tool[]>([]);
+  const [filteredTools, setFilteredTools] = React.useState<Tool[]>([]);
   const [loading, setLoading] = React.useState(true);
   const [error, setError] = React.useState<string | null>(null);
 
-  // price filter
   const [searchQuery, setSearchQuery] = React.useState("");
   const [priceMin, setPriceMin] = React.useState<number | undefined>(undefined);
   const [priceMax, setPriceMax] = React.useState<number | undefined>(undefined);
-
-  // sort
-  const [sort, setSort] = React.useState<SortOrder | undefined>(undefined);
+  const [sort, setSort] = React.useState<string>("");
 
   const loadTools = React.useCallback(async () => {
     setLoading(true);
     setError(null);
     try {
-      const data = await fetchTools({
-        query: searchQuery.trim(),
-        priceMin,
-        priceMax,
-        sort,
-      });
-      setTools(data);
+      // Load from JSON file
+      const response = await fetch('/data/tools.json');
+      const jsonTools = await response.json();
+      
+      // Load from localStorage (newly added tools)
+      const localTools = localStorage.getItem('userTools');
+      const userTools = localTools ? JSON.parse(localTools) : [];
+      
+      // Combine both
+      const allTools = [...jsonTools, ...userTools];
+      setTools(allTools);
+      setFilteredTools(allTools);
     } catch (err) {
       console.error(err);
       setError("Failed to load tools");
     } finally {
       setLoading(false);
     }
-  }, [searchQuery, priceMin, priceMax, sort]);
+  }, []);
 
   React.useEffect(() => {
     loadTools();
   }, [loadTools]);
 
+  React.useEffect(() => {
+    let result = [...tools];
+
+    // Search filter
+    if (searchQuery.trim()) {
+      result = result.filter(tool =>
+        tool.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        tool.description.toLowerCase().includes(searchQuery.toLowerCase())
+      );
+    }
+
+    // Price filter
+    if (priceMin !== undefined) {
+      result = result.filter(tool => tool.price >= priceMin);
+    }
+    if (priceMax !== undefined) {
+      result = result.filter(tool => tool.price <= priceMax);
+    }
+
+    // Sort
+    if (sort === "price-asc") {
+      result.sort((a, b) => a.price - b.price);
+    } else if (sort === "price-desc") {
+      result.sort((a, b) => b.price - a.price);
+    } else if (sort === "name-asc") {
+      result.sort((a, b) => a.name.localeCompare(b.name));
+    }
+
+    setFilteredTools(result);
+  }, [tools, searchQuery, priceMin, priceMax, sort]);
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    loadTools();
   };
 
   const handleClearFilters = () => {
     setSearchQuery("");
     setPriceMin(undefined);
     setPriceMax(undefined);
-    setSort(undefined);
-    loadTools();
+    setSort("");
   };
 
   return (
@@ -64,12 +106,10 @@ const Browse: React.FC = () => {
           <p className="text-muted">Search, filter by price, and sort results.</p>
         </section>
 
-        {/* Filters + Sort */}
         <form
           onSubmit={handleSubmit}
           className="mb-4 row justify-content-center gy-2 gx-3 align-items-center"
         >
-          {/* Search */}
           <div className="col-12 col-md-4">
             <input
               type="text"
@@ -80,7 +120,6 @@ const Browse: React.FC = () => {
             />
           </div>
 
-          {/* Price min */}
           <div className="col-6 col-md-2">
             <input
               type="number"
@@ -94,7 +133,6 @@ const Browse: React.FC = () => {
             />
           </div>
 
-          {/* Price max */}
           <div className="col-6 col-md-2">
             <input
               type="number"
@@ -108,27 +146,20 @@ const Browse: React.FC = () => {
             />
           </div>
 
-          {/* Sort */}
           <div className="col-12 col-md-3">
             <select
               className="form-select"
-              value={sort ?? ""}
-              onChange={(e) =>
-                setSort((e.target.value || undefined) as SortOrder | undefined)
-              }
+              value={sort}
+              onChange={(e) => setSort(e.target.value)}
             >
               <option value="">Sort by…</option>
               <option value="price-asc">Price: Low → High</option>
               <option value="price-desc">Price: High → Low</option>
-              <option value="newest">Newest → Oldest</option>
-              <option value="oldest">Oldest → Newest</option>
+              <option value="name-asc">Name: A → Z</option>
             </select>
           </div>
 
           <div className="col-12 col-md-1 d-flex gap-2 justify-content-center">
-            <button type="submit" className="btn btn-primary w-100">Apply</button>
-          </div>
-          <div className="col-12 col-md-2 d-flex gap-2 justify-content-center">
             <button
               type="button"
               className="btn btn-outline-secondary w-100"
@@ -139,7 +170,6 @@ const Browse: React.FC = () => {
           </div>
         </form>
 
-        {/* Results */}
         {error && <div className="alert alert-danger text-center">{error}</div>}
 
         {loading && (
@@ -152,13 +182,13 @@ const Browse: React.FC = () => {
           </div>
         )}
 
-        {!loading && !error && tools.length === 0 && (
+        {!loading && !error && filteredTools.length === 0 && (
           <div className="text-center text-secondary">No tools found.</div>
         )}
 
-        {!loading && !error && tools.length > 0 && (
+        {!loading && !error && filteredTools.length > 0 && (
           <div className="row g-3">
-            {tools.map((tool) => (
+            {filteredTools.map((tool) => (
               <div className="col-12 col-sm-6 col-lg-4" key={tool.id}>
                 <ToolCard tool={tool} />
               </div>
@@ -172,10 +202,3 @@ const Browse: React.FC = () => {
 };
 
 export default Browse;
-
-
-
-
-
-
-

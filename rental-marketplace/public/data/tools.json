@@ -1,0 +1,134 @@
+[
+  {
+    "id": 1,
+    "name": "Power Drill",
+    "description": "18V cordless drill with battery pack. Perfect for DIY projects.",
+    "price": 25,
+    "rate": "per day",
+    "category": "Power Tools",
+    "image": "images/tools/drill-kit-1.jpg",
+    "owner": "John Doe",
+    "ownerId": 1
+  },
+  {
+    "id": 2,
+    "name": "Circular Saw",
+    "description": "Professional grade circular saw. Great for cutting wood and other materials.",
+    "price": 30,
+    "rate": "per day",
+    "category": "Power Tools",
+    "image": "images/tools/circular-saw.jpg",
+    "owner": "Jane Smith",
+    "ownerId": 2
+  },
+  {
+    "id": 3,
+    "name": "Ladder 8ft",
+    "description": "Sturdy 8-foot aluminum ladder. Safe and stable for various tasks.",
+    "price": 15,
+    "rate": "per day",
+    "category": "Ladders",
+    "image": "images/tools/ladder.jpg",
+    "owner": "John Doe",
+    "ownerId": 1
+  },
+  {
+    "id": 4,
+    "name": "Lawn Mower",
+    "description": "Gas-powered lawn mower. Well-maintained and easy to use.",
+    "price": 20,
+    "rate": "per day",
+    "category": "Garden Tools",
+    "image": "images/tools/lawn-mower.jpg",
+    "owner": "Mike Johnson",
+    "ownerId": 3
+  },
+  {
+    "id": 5,
+    "name": "Pressure Washer",
+    "description": "2000 PSI pressure washer. Great for cleaning driveways and outdoor areas.",
+    "price": 35,
+    "rate": "per day",
+    "category": "Cleaning",
+    "image": "images/tools/pressure-washer.jpg",
+    "owner": "Jane Smith",
+    "ownerId": 2
+  },
+  {
+    "id": 6,
+    "name": "Tile Cutter",
+    "description": "Manual tile cutter for ceramic and porcelain tiles.",
+    "price": 18,
+    "rate": "per day",
+    "category": "Construction",
+    "image": "images/tools/tile-cutter.jpg",
+    "owner": "Sarah Lee",
+    "ownerId": 4
+  },
+  {
+    "id": 7,
+    "name": "Hedge Trimmer",
+    "description": "Electric hedge trimmer with long reach. Perfect for garden maintenance.",
+    "price": 22,
+    "rate": "per day",
+    "category": "Garden Tools",
+    "image": "images/tools/hedge-trimmer.jpg",
+    "owner": "Mike Johnson",
+    "ownerId": 3
+  },
+  {
+    "id": 8,
+    "name": "Paint Sprayer",
+    "description": "HVLP paint sprayer for smooth, professional finishes.",
+    "price": 28,
+    "rate": "per day",
+    "category": "Painting",
+    "image": "images/tools/paint-sprayer.jpg",
+    "owner": "Sarah Lee",
+    "ownerId": 4
+  },
+  {
+    "id": 9,
+    "name": "Floor Sander",
+    "description": "Heavy-duty floor sander for refinishing hardwood floors.",
+    "price": 45,
+    "rate": "per day",
+    "category": "Construction",
+    "image": "images/tools/floor-sander.jpg",
+    "owner": "John Doe",
+    "ownerId": 1
+  },
+  {
+    "id": 10,
+    "name": "Chainsaw",
+    "description": "16-inch gas chainsaw. Ideal for cutting firewood and tree trimming.",
+    "price": 40,
+    "rate": "per day",
+    "category": "Garden Tools",
+    "image": "images/tools/chainsaw.jpg",
+    "owner": "Mike Johnson",
+    "ownerId": 3
+  },
+  {
+    "id": 11,
+    "name": "Air Compressor",
+    "description": "Portable air compressor for pneumatic tools and inflating tires.",
+    "price": 32,
+    "rate": "per day",
+    "category": "Power Tools",
+    "image": "images/tools/air-compressor.jpg",
+    "owner": "Jane Smith",
+    "ownerId": 2
+  },
+  {
+    "id": 12,
+    "name": "Concrete Mixer",
+    "description": "Electric concrete mixer. Perfect for small to medium projects.",
+    "price": 50,
+    "rate": "per day",
+    "category": "Construction",
+    "image": "images/tools/concrete-mixer.jpg",
+    "owner": "Sarah Lee",
+    "ownerId": 4
+  }
+]

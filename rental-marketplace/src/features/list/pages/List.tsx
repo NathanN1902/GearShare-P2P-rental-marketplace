@@ -1,23 +1,24 @@
 import React from "react";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Header from "../../../components/Header";
 import Footer from "../../../components/Footer";
 import ToolCard from "../../../components/ToolCard";
-import { TOOLS } from "../../../data/fixtures";
 import { Tool } from "../../../data/types";
 
 const List: React.FC = () => {
+  const navigate = useNavigate();
   const [form, setForm] = useState<{
-    title: string;
+    name: string;
     description: string;
     price: string;
-    location: string;
+    category: string;
     image: string | null;
   }>({
-    title: "",
+    name: "",
     description: "",
     price: "",
-    location: "",
+    category: "",
     image: null,
   });
 
@@ -39,16 +40,32 @@ const List: React.FC = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Submit form logic here
-    const newTool: Tool ={
-      id: Date.now().toString(),
-      title: form.title,
-      subtitle: form.description,
-      location: form.location,
-      priceDay: parseFloat(form.price),
+
+    // Create new tool with proper structure
+    const newTool: Tool = {
+      id: Date.now(), // Use number instead of string
+      name: form.name,
+      description: form.description,
+      price: parseFloat(form.price),
+      rate: "per day",
+      category: form.category,
+      image: form.image || "",
+      owner: "Current User", // TODO: Replace with actual logged-in user
+      ownerId: 1, // TODO: Replace with actual logged-in user ID
     };
 
+    // Load existing tools from localStorage
+    const storedTools = localStorage.getItem("tools");
+    const existingTools: Tool[] = storedTools ? JSON.parse(storedTools) : [];
+
+    // Add new tool and save back to localStorage
+    const updatedTools = [...existingTools, newTool];
+    localStorage.setItem("tools", JSON.stringify(updatedTools));
+
     console.log("New Tool Listed:", newTool);
+
+    // Navigate to browse page to see the new listing
+    navigate("/browse");
   };
 
 
@@ -75,15 +92,15 @@ const List: React.FC = () => {
               onSubmit={handleSubmit}
             >  
               <div className="mb-3">
-                <label className="form-label fw-semibold">Title</label>
+                <label className="form-label fw-semibold">Name</label>
                 <input
                   className="form-control"
                   type="text"
-                  name="title"
-                  value={form.title}
+                  name="name"
+                  value={form.name}
                   onChange={handleChange}
-                  placeholder="Enter item title"
-                />  
+                  placeholder="Enter tool name"
+                />
               </div>
 
               <div className="mb-3">
@@ -94,8 +111,8 @@ const List: React.FC = () => {
                   name="description"
                   value={form.description}
                   onChange={handleChange}
-                  placeholder="Enter item description"
-                />  
+                  placeholder="Enter tool description"
+                />
               </div>
 
               <div className="mb-3">
@@ -106,20 +123,20 @@ const List: React.FC = () => {
                   name="price"
                   value={form.price}
                   onChange={handleChange}
-                  placeholder="Enter item price per day"
-                />  
+                  placeholder="Enter price per day"
+                />
               </div>
-              
+
               <div className="mb-3">
-                <label className="form-label fw-semibold">Location</label>
+                <label className="form-label fw-semibold">Category</label>
                 <input
                   className="form-control"
                   type="text"
-                  name="location"
-                  value={form.location}
+                  name="category"
+                  value={form.category}
                   onChange={handleChange}
-                  placeholder="Enter suburb or postcode"
-                />  
+                  placeholder="e.g., Power Tools, Garden Tools"
+                />
               </div>
               
 

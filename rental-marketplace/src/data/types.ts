@@ -1,12 +1,13 @@
 export type Tool = {
-  id: string;
-  title: string;
-  subtitle: string;
-  location: string;
-  priceDay: number;
-  badge?: "Popular" | "New";
-  photos: ToolPhoto[];
+  id: number;
+  name: string;
   description: string;
+  price: number;
+  rate: string;
+  category: string;
+  image: string;
+  owner: string;
+  ownerId: number;
 };
 
 export type ToolPhoto = {

@@ -1,13 +1,36 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Header from "../../../components/Header";
 import Footer from "../../../components/Footer";
 import SearchBar from "../../../components/SearchBar";
 import ToolCard from "../../../components/ToolCard";
-import { TOOLS } from "../../../data/fixtures";
+import type { Tool } from "../../../data/types";
 
 const Home: React.FC = () => {
   const navigate = useNavigate();
+  const [tools, setTools] = useState<Tool[]>([]);
+
+  useEffect(() => {
+    const loadTools = async () => {
+      try {
+        // Load tools from JSON file
+        const response = await fetch("/data/tools.json");
+        const jsonTools: Tool[] = await response.json();
+
+        // Load tools from localStorage
+        const storedTools = localStorage.getItem("tools");
+        const localTools: Tool[] = storedTools ? JSON.parse(storedTools) : [];
+
+        // Combine both sources
+        const allTools = [...jsonTools, ...localTools];
+        setTools(allTools);
+      } catch (error) {
+        console.error("Error loading tools:", error);
+      }
+    };
+
+    loadTools();
+  }, []);
 
   const handleSearch = (query: string) => {
     // Navigate to browse page with search query
@@ -43,7 +66,7 @@ const Home: React.FC = () => {
           </div>
 
           <div className="row g-3">
-            {TOOLS.slice(0, 6).map((tool) => (
+            {tools.slice(0, 6).map((tool) => (
               <div className="col-12 col-sm-6 col-lg-4" key={tool.id}>
                 <ToolCard tool={tool} />
               </div>
