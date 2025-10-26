@@ -3,6 +3,8 @@ import Header from "../../../components/Header";
 import Footer from "../../../components/Footer";
 import ToolCard from "../../../components/ToolCard";
 import { TOOLS } from "../../../data/fixtures";
+import emailjs from "@emailjs/browser";
+
 
 // Dummy data, logic to be implemented later
 
@@ -46,11 +48,30 @@ const mockTool = {
   },
 };
 
+const SERVICE_ID = import.meta.env.VITE_EMAILJS_SERVICE_ID || "service_p0d535w";
+const TEMPLATE_ID = import.meta.env.VITE_EMAILJS_TEMPLATE_ID || "template_yhzo20s";
+const PUBLIC_KEY = import.meta.env.VITE_EMAILJS_PUBLIC_KEY || "w0oJ4GnkMzxRRUwt6";
+
 const ToolDetails: React.FC = () => {
   const [activeIdx, setActiveIdx] = useState(0);
 
   // Logic for related tool to be implemented later
   const related = useMemo(() => TOOLS.slice(0, 4), []);
+
+  function sendEmail(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    const form = e.currentTarget;
+    emailjs
+      .sendForm(SERVICE_ID, TEMPLATE_ID, form, PUBLIC_KEY)
+      .then(() => {
+        alert("Booking request sent. Check your email.");
+        form.reset();
+      })
+      .catch((err) => {
+        console.error("EmailJS error", err);
+        alert("Failed to send booking email.");
+      });
+  }
 
   return (
     <>
@@ -248,36 +269,54 @@ const ToolDetails: React.FC = () => {
 
           {/* Right: booking card */}
           <aside className="col-lg-4">
-            <div className="bg-white border rounded-3 p-3 position-sticky" style={{ top: 16 }}>
-              <div className="d-flex align-items-baseline justify-content-between">
-                <div className="fs-4 fw-semibold">${mockTool.priceDay}</div>
-                <div className="small text-secondary">per day</div>
-              </div>
-
-              <div className="row g-2 mt-3">
-                <div className="col-6">
-                  <label className="form-label small">Start</label>
-                  <input type="date" className="form-control" />
+            <form onSubmit={sendEmail}>
+              <div className="bg-white border rounded-3 p-3 position-sticky" style={{ top: 16 }}>
+                <div className="d-flex align-items-baseline justify-content-between">
+                  <div className="fs-4 fw-semibold">${mockTool.priceDay}</div>
+                  <div className="small text-secondary">per day</div>
                 </div>
-                <div className="col-6">
-                  <label className="form-label small">End</label>
-                  <input type="date" className="form-control" />
+
+                <div className="row g-2 mt-3">
+                  <div className="col-6">
+                    <label className="form-label small">Start</label>
+                    <input name="start_date" type="date" className="form-control" />
+                  </div>
+                  <div className="col-6">
+                    <label className="form-label small">End</label>
+                    <input name="end_date" type="date" className="form-control" />
+                  </div>
+                </div>
+
+                <div className="mt-2">
+                  <label className="form-label small">Your name</label>
+                  <input name="renter_name" className="form-control" placeholder="Your full name" />
+                </div>
+
+                <div className="mt-2">
+                  <label className="form-label small">Your email</label>
+                  <input name="renter_email" className="form-control" placeholder="you@example.com" type="email" />
+                </div>
+
+                <div className="mt-2">
+                  <label className="form-label small">Message to host (optional)</label>
+                  <textarea name="message" className="form-control" rows={2} placeholder="Hi! I'm interested in renting…" />
+                </div>
+
+                {/* hidden fields passed to template */}
+                <input type="hidden" name="tool_title" value={mockTool.title} />
+                <input type="hidden" name="host_name" value={mockTool.host.name} />
+                {/* add host_email if available in mockTool.host.email */}
+                <input type="hidden" name="host_email" value={(mockTool.host as any).email || ""} />
+
+                <button type="submit" className="btn btn-dark w-100 mt-3">Book Instantly</button>
+                <button type="button" className="btn btn-outline-secondary w-100 mt-2">Message Host</button>
+
+                <hr className="my-3" />
+                <div className="small text-secondary">
+                  Free cancellation within 24 hours of booking request.
                 </div>
               </div>
-
-              <div className="mt-2">
-                <label className="form-label small">Message to host (optional)</label>
-                <textarea className="form-control" rows={2} placeholder="Hi! I'm interested in renting…" />
-              </div>
-
-              <button className="btn btn-dark w-100 mt-3">Book Instantly</button>
-              <button className="btn btn-outline-secondary w-100 mt-2">Message Host</button>
-
-              <hr className="my-3" />
-              <div className="small text-secondary">
-                Free cancellation within 24 hours of booking request.
-              </div>
-            </div>
+            </form>
           </aside>
         </div>
       </main>
