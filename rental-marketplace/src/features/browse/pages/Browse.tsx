@@ -36,7 +36,7 @@ const Browse: React.FC = () => {
       const jsonTools = await response.json();
       
       // Load from localStorage (newly added tools)
-      const localTools = localStorage.getItem('userTools');
+      const localTools = localStorage.getItem('tools');
       const userTools = localTools ? JSON.parse(localTools) : [];
       
       // Combine both

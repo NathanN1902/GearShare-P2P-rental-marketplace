@@ -36,4 +36,6 @@ export type User = {
   rating: number;
   totalRentals: number;
   totalListings: number;
+  verified?: boolean;
+  verifiedAt?: string;
 };

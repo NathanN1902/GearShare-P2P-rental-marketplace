@@ -10,7 +10,8 @@
     "memberSince": "2024-01-15",
     "rating": 4.8,
     "totalRentals": 15,
-    "totalListings": 3
+    "totalListings": 3,
+    "verified": false
   },
   {
     "id": 2,
@@ -23,7 +24,9 @@
     "memberSince": "2024-02-20",
     "rating": 4.9,
     "totalRentals": 22,
-    "totalListings": 8
+    "totalListings": 8,
+    "verified": true,
+    "verifiedAt": "2024-03-01T10:30:00.000Z"
   },
   {
     "id": 3,
@@ -36,6 +39,7 @@
     "memberSince": "2024-03-10",
     "rating": 5.0,
     "totalRentals": 30,
-    "totalListings": 12
+    "totalListings": 12,
+    "verified": false
   }
 ]

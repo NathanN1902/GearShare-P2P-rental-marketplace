@@ -3,8 +3,7 @@ import Header from "../../../components/Header";
 import Footer from "../../../components/Footer";
 import { Link, useNavigate } from "react-router-dom";
 import type { User as UserType } from "../../../data/types";
-
-type UploadFile = File | null;
+import Verification from "../components/Verification";
 
 const User: React.FC = () => {
   const navigate = useNavigate();
@@ -37,11 +36,6 @@ const User: React.FC = () => {
     setBio(currentUser.bio);
   }, [navigate]);
 
-  // Identity / verification
-  const [progress, setProgress] = useState(60); // verification progress (dummy)
-  const [idFront, setIdFront] = useState<UploadFile>(null);
-  const [idBack, setIdBack] = useState<UploadFile>(null);
-
   // Settings toggles
   const [notifEmail, setNotifEmail] = useState(true);
   const [notifSMS, setNotifSMS] = useState(false);
@@ -69,12 +63,6 @@ const User: React.FC = () => {
     localStorage.setItem("currentUser", JSON.stringify(updatedUser));
     setUser(updatedUser);
     alert("Profile updated successfully!");
-  }
-
-  function handleSubmitVerification(e: React.FormEvent) {
-    e.preventDefault();
-    alert("Submitted for verification (placeholder)");
-    setProgress(100);
   }
 
   return (
@@ -106,10 +94,17 @@ const User: React.FC = () => {
               <div className="d-flex flex-wrap align-items-center gap-2">
                 <h5 className="mb-0">{user?.name || "Loading..."}</h5>
                 <span className="badge text-bg-secondary">Member</span>
-                <span className="badge text-bg-success">
-                  <i className="bi bi-shield-check me-1" />
-                  Verified
-                </span>
+                {user?.verified ? (
+                  <span className="badge text-bg-success">
+                    <i className="bi bi-shield-check me-1" />
+                    Verified
+                  </span>
+                ) : (
+                  <span className="badge text-bg-warning">
+                    <i className="bi bi-exclamation-circle me-1" />
+                    Not Verified
+                  </span>
+                )}
                 <span className="badge text-bg-light border text-muted">
                   {user?.location || ""}
                 </span>
@@ -232,78 +227,16 @@ const User: React.FC = () => {
 
           {/* Right column: Verification + Settings */}
           <div className="col-lg-4">
-            {/* Verification */}
-            <div className="card border-0 shadow-sm mb-4">
-              <div className="card-body">
-                <div className="d-flex align-items-center justify-content-between mb-2">
-                  <h6 className="mb-0">Verification</h6>
-                  <span className="badge text-bg-warning">In progress</span>
-                </div>
-
-                <div className="small text-secondary mb-2">
-                  Complete profile verification.
-                </div>
-
-                <div className="progress mb-3" role="progressbar" aria-valuenow={progress} aria-valuemin={0} aria-valuemax={100}>
-                  <div className="progress-bar" style={{ width: `${progress}%` }}>
-                    {progress}%
-                  </div>
-                </div>
-
-                {/* Avatar placeholders */}
-                <div className="row g-3 mb-3">
-                  {[1, 2, 3].map((i) => (
-                    <div className="col-4" key={i}>
-                      <div className="bg-light rounded d-flex flex-column align-items-center justify-content-center p-3 border">
-                        <div className="rounded-circle bg-white border mb-2" style={{ width: 40, height: 40 }} />
-                        <div className="small text-secondary">Connect</div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-
-                {/* ID uploads */}
-                <form onSubmit={handleSubmitVerification}>
-                  <div className="row g-3">
-                    <div className="col-12">
-                      <label className="form-label small">Government ID (front)</label>
-                      <div className="input-group">
-                        <input
-                          className="form-control"
-                          type="file"
-                          accept="image/*,application/pdf"
-                          onChange={(e) => setIdFront(e.target.files?.[0] ?? null)}
-                        />
-                        <button className="btn btn-outline-secondary" type="button" disabled={!idFront}>
-                          Clear
-                        </button>
-                      </div>
-                    </div>
-
-                    <div className="col-12">
-                      <label className="form-label small">Government ID (back)</label>
-                      <div className="input-group">
-                        <input
-                          className="form-control"
-                          type="file"
-                          accept="image/*,application/pdf"
-                          onChange={(e) => setIdBack(e.target.files?.[0] ?? null)}
-                        />
-                        <button className="btn btn-outline-secondary" type="button" disabled={!idBack}>
-                          Clear
-                        </button>
-                      </div>
-                    </div>
-
-                    <div className="col-12">
-                      <button className="btn btn-dark w-100" type="submit">
-                        Submit for Verification
-                      </button>
-                    </div>
-                  </div>
-                </form>
+            {/* Verification - Real Working Component */}
+            {user && (
+              <div className="mb-4">
+                <Verification
+                  userId={user.id}
+                  userName={user.name}
+                  userEmail={user.email}
+                />
               </div>
-            </div>
+            )}
 
             {/* Settings */}
             <div className="card border-0 shadow-sm">

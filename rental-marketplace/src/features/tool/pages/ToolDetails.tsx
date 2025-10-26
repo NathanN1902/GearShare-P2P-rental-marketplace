@@ -170,6 +170,11 @@ const ToolDetails: React.FC = () => {
     }
   };
 
+  // Debug logging
+  console.log("Current tool state:", tool);
+  console.log("Tool image value:", tool?.image);
+  console.log("Tool image type:", typeof tool?.image);
+
   return (
     <>
       <Header />
@@ -187,12 +192,16 @@ const ToolDetails: React.FC = () => {
           {/* Left column - Image */}
           <div className="col-lg-6">
             <div className="bg-light rounded d-flex align-items-center justify-content-center" style={{ height: "400px" }}>
-              {tool.image ? (
+              {tool.image && tool.image.trim() !== "" ? (
                 <img
                   src={tool.image}
                   alt={tool.name}
                   className="img-fluid rounded"
                   style={{ maxHeight: "100%", maxWidth: "100%", objectFit: "contain" }}
+                  onError={(e) => {
+                    console.error("Image failed to load:", tool.image);
+                    e.currentTarget.style.display = "none";
+                  }}
                 />
               ) : (
                 <span className="text-secondary">No image available</span>
@@ -216,6 +225,15 @@ const ToolDetails: React.FC = () => {
                   <div className="alert alert-warning">
                     <i className="bi bi-exclamation-triangle me-2"></i>
                     Please <Link to="/login">log in</Link> to request a booking.
+                  </div>
+                ) : currentUser.id === tool.ownerId ? (
+                  <div className="alert alert-info">
+                    <i className="bi bi-info-circle me-2"></i>
+                    This is your own tool. You cannot book your own tools.
+                    <br />
+                    <Link to="/browse" className="btn btn-outline-primary btn-sm mt-2">
+                      Browse Other Tools
+                    </Link>
                   </div>
                 ) : (
                   <form onSubmit={handleBooking}>
