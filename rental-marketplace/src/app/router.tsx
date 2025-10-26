@@ -5,6 +5,7 @@ import ToolDetails from "../features/tool/pages/ToolDetails";
 import Login from "../features/auth/pages/Login";
 import User from "../features/user/pages/User";
 import List from "../features/list/pages/List";
+import Messages from "../features/messages/pages/Messages";
 
 
 
@@ -26,6 +27,7 @@ export const router = createBrowserRouter([
       { path: "tools/:id", element: <ToolDetails /> },
       { path: "login", element: <Login /> },
       { path: "user", element: <User /> },
+      { path: "messages", element: <Messages /> },
       { path: "list", element: <List /> },
 
     ],
