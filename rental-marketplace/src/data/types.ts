@@ -5,6 +5,14 @@ export type Tool = {
   location: string;
   priceDay: number;
   badge?: "Popular" | "New";
+  photos: ToolPhoto[];
+  description: string;
+};
+
+export type ToolPhoto = {
+  id: string;
+  url: string; 
+  alt?: string;
 };
 
 export type BrowseFilters = {
@@ -19,7 +27,5 @@ export type User = {
   id: string;
   name: string;
   email: string;
-  joinedAt: Date; 
-  avatarUrl?: string; 
-  bio?: string;   
+  city: string;
 };

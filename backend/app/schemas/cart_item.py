@@ -1,23 +1,13 @@
 from pydantic import BaseModel, Field, validator
 from typing import Optional
 from datetime import datetime
-from enum import Enum
 
 
-class BookingStatus(str, Enum):
-    PENDING = "pending"
-    ACCEPTED = "accepted"
-    REJECTED = "rejected"
-    CANCELLED = "cancelled"
-    COMPLETED = "completed"
-
-
-class BookingCreate(BaseModel):
+class CartItemCreate(BaseModel):
+    cart_id: int
+    item_id: int
     start_date: datetime
     end_date: datetime
-    item_id: int
-    renter_id: int
-    lender_id: int
 
     @validator('end_date')
     def validate_end_date(cls, v, values):
@@ -32,10 +22,9 @@ class BookingCreate(BaseModel):
         return v
 
 
-class BookingUpdate(BaseModel):
+class CartItemUpdate(BaseModel):
     start_date: Optional[datetime] = None
     end_date: Optional[datetime] = None
-    status: Optional[BookingStatus] = None
 
     @validator('end_date')
     def validate_end_date(cls, v, values):
@@ -45,24 +34,18 @@ class BookingUpdate(BaseModel):
         return v
 
 
-class BookingResponse(BaseModel):
+class CartItemResponse(BaseModel):
     id: int
+    date_added: datetime
     start_date: datetime
     end_date: datetime
-    status: BookingStatus
+    cart_id: int
     item_id: int
-    renter_id: int
-    lender_id: int
     
     class Config:
         from_attributes = True
 
 
-class BookingWithDetails(BookingResponse):
+class CartItemWithDetails(CartItemResponse):
     item: Optional[dict] = None  # Will be populated with item info
-    renter: Optional[dict] = None  # Will be populated with renter info
-    lender: Optional[dict] = None  # Will be populated with lender info
-
-
-class BookingStatusUpdate(BaseModel):
-    status: BookingStatus
+    calculated_price: Optional[float] = None  # Will be calculated based on item price and duration
