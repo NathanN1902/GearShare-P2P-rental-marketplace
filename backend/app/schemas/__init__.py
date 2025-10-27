@@ -23,16 +23,6 @@ from .payment import (
     PaymentStatusUpdate, PaymentRefund, PaymentStatus
 )
 
-# Chat schemas
-from .chat import (
-    ChatCreate, ChatResponse, ChatWithDetails, ChatList
-)
-
-# Message schemas
-from .message import (
-    MessageCreate, MessageResponse, MessageWithDetails, MessageUpdate
-)
-
 # Cart schemas
 from .cart import (
     CartCreate, CartResponse, CartWithItems
@@ -57,35 +47,29 @@ from .review import (
 __all__ = [
     # User
     "UserCreate", "UserLogin", "UserResponse", "UserUpdate", "UserToken", "UserProfile",
-    
+
     # Item
     "ItemCreate", "ItemUpdate", "ItemResponse", "ItemWithOwner", "ItemSearch",
     "RateType", "ItemCategory",
-    
+
     # Booking
     "BookingCreate", "BookingUpdate", "BookingResponse", "BookingWithDetails",
     "BookingStatusUpdate", "BookingStatus",
-    
+
     # Payment
     "PaymentCreate", "PaymentUpdate", "PaymentResponse", "PaymentWithDetails",
     "PaymentStatusUpdate", "PaymentRefund", "PaymentStatus",
-    
-    # Chat
-    "ChatCreate", "ChatResponse", "ChatWithDetails", "ChatList",
-    
-    # Message
-    "MessageCreate", "MessageResponse", "MessageWithDetails", "MessageUpdate",
-    
+
     # Cart
     "CartCreate", "CartResponse", "CartWithItems",
-    
+
     # Cart Item
     "CartItemCreate", "CartItemUpdate", "CartItemResponse", "CartItemWithDetails",
-    
+
     # Rental Request
     "RentalRequestCreate", "RentalRequestUpdate", "RentalRequestResponse",
     "RentalRequestWithDetails", "RentalRequestStatusUpdate", "RentalRequestStatus",
-    
+
     # Review
     "ReviewCreate", "ReviewUpdate", "ReviewResponse", "ReviewWithDetails", "ReviewSummary",
 ]

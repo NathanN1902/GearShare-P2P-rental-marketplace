@@ -17,6 +17,7 @@ interface Booking {
   toolName: string;
   ownerId: number;
   ownerName: string;
+  ownerEmail?: string;
   renterId: number;
   renterName: string;
   renterEmail: string;

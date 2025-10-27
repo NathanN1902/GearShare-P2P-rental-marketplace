@@ -104,7 +104,7 @@ const Home: React.FC = () => {
           </div>
 
           <div className="row g-3 mb-4">
-            {tools.slice(0, 12).map((tool) => (
+            {tools.slice(0, 9).map((tool) => (
               <div className="col-12 col-sm-6 col-lg-4" key={tool.id}>
                 <ToolCard tool={tool} />
               </div>
