@@ -1,5 +1,7 @@
 # Project Title: Rental Marketplace
 
+A peer-to-peer tool rental marketplace that connects tool owners with renters, enabling cost-effective access to equipment for temporary projects.
+
 ## Group 24
 
 | Student Name | Project Role |
@@ -9,79 +11,58 @@
 | Kim | Back-end developer |
 | Quinton | Front-end developer |
 
-## Housekeeping
+## Project Overview
 
-### Branch
+This platform allows users to:
+- **Browse and search** available rental tools with advanced filtering
+- **List tools** for rent with images, pricing, and availability
+- **Book tools** for specific dates
+- **Manage rentals** through user profiles
+- **View location-based results** sorted by proximity
 
-Ensure master is up to date using `git pull`
+## Tech Stack
 
-Create/switch to branch:
+- **Frontend:** React 18 + TypeScript + Vite
+- **Styling:** Bootstrap 5
+- **Routing:** React Router v6
+- **State Management:** React Hooks (useState, useEffect)
+- **Data Storage:** Static JSON + LocalStorage (MVP)
+- **Future Backend:** FastAPI + PostgreSQL
 
-```
-git checkout -b branch-name
-```
+## Getting Started
 
-Quick table for commands:
+### Prerequisites
 
-| Action | Command line |
-| --- | --- |
-| Check if you're in the branch | `git branch` |
-| Pushing branch to repository (for the first time) | `git push -u origin <branch-name>` |
-| Pushing to repository (now that branch is available in repo) | `git push origin <branch-name>` |
-| Deleting a branch (only when necessary) | `git branch -d <branch-name>` |
+- Node.js (v16 or higher)
+- npm or yarn
 
-### Pull Request
+### Installation
 
-```
-git add .
-git commit -m "meaningful message"
-git push
+1. **Clone the repository**
+   ```bash
+   git clone <repository-url>
+   cd rental-marketplace
+   ```
 
-```
+2. **Install dependencies**
+   ```bash
+   npm install
+   ```
 
-Create PR in GitHub.
+3. **Start the development server**
+   ```bash
+   npm run dev
+   ```
 
-## Backend Setup
+4. **Open your browser**
+   ```
+   Navigate to: http://localhost:5173
+   ```
 
-**<ins>Setting up a virtual environment</ins>**
+## Available Scripts
 
-In terminal: 
-
-```
-cd backend
-
-python3 -m venv env
-
-source env/bin/activate
-```
-
-Install dependencies:
-
-```
-pip install -r requirements.txt
-```
-
-Deactivate the virtual enviroment:
-```
-deactivate
-```
-
-**<ins>Running backend</ins>**
-
-Navigate to backend directory
-
-Standard:
-```
-python3 -m app.main
-```
-
-Docker compose:
-```
-docker compose up --build
-```
-
-Other:
-```
-uvicorn main:app --reload
-fastapi run app/main.py
-```
+```bash
+npm run dev          # Start development server
+npm run build        # Build for production
+npm run preview      # Preview production build
+npm run lint         # Run ESLint
