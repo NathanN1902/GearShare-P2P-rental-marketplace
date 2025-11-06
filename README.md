@@ -40,8 +40,8 @@ This platform allows users to:
 
 1. **Clone the repository**
    ```bash
-   git clone <repository-url>
-   cd rental-marketplace
+   git clone https://github.com/NathanN1902/GearShare-P2P-rental-marketplace.git
+   cd GearShare-P2P-rental-marketplace
    ```
 
 2. **Install dependencies**
